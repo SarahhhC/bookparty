@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<head>
+    <style type="text/css">
+        .top {display:block; font-size :30pt; font-family:"Times New Roman"; color:black; margin-top:300px background-color:white ;  text-align:center;}
+        .mailinfo {font-family:"Times New Roman";font-size :15pt; margin-top:300px}
+    </style>
+<meta charset="UTF-8">
+    <title>판매</title>
+</head>
+<body>
+    <b class="top">
+        <form method="post" action="/bookparty/storebookinfo_complete">
+            <input type = "hidden" name = "user_id" value = "<%= @user_id %>" >
+            Title : <input type = "text" name = "booktitle"><br>
+            Author : <input type = "text" name = "bookauthor"><br>
+            Publisher : <input type = "text" name = "bookpublisher"><br>
+            Price : <input type = "text" name = "bookprice"><br>
+            State : <input type = "text" name = "bookstate"><br>
+            Sellterm : <input type = "text" name = "booksellterm"><br>
+            <input type="submit" value="등록하기">
+        </form>
+    </b>
+</body>
+</html>

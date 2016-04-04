@@ -14,6 +14,7 @@
     <% unless @userid.nil? %>
         <a href="/bookparty/logout">logout...</a>
         <h2> <%= @username %>님의 페이지입니다, </h2>
+        <a href="/bookparty/storebookinfo"><input type = "button" value="storebookinfo"></a>
     <% else %>
         <h2> <%= @alertNonUser %> </h2>
     <% end %>

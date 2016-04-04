@@ -1,5 +1,4 @@
 class BookpartyController < ApplicationController
-  
     def signup
     end
     
@@ -41,7 +40,7 @@ class BookpartyController < ApplicationController
           else
             session[:user_id] = u.id
             flash[:alert] = "Successfully logged in."
-            redirect_to '/bookparty/search'
+            redirect_to '/bookparty/search' and '/bookparty/storebookinfo_complete'
           end
         end
     end
@@ -61,6 +60,23 @@ class BookpartyController < ApplicationController
         else 
           @username = User.find(@userid).username
         end
+    end
+    
+    def storebookinfo
+        @user_id = session[:user_id]
+    end
+    
+    def storebookinfo_complete
+        sellbook = Sellbook.new
+        sellbook.user_id = params[:user_id]
+        sellbook.booktitle = params[:booktitle]
+        sellbook.bookauthor = params[:bookauthor]
+        sellbook.bookpublisher = params[:bookpublisher]
+        sellbook.bookprice = params[:bookprice]
+        sellbook.bookstate = params[:bookstate]
+        sellbook.booksellterm = params[:booksellterm] #남은 기간 ~일 
+        sellbook.save
+        redirect_to '/bookparty/search'
     end
     
 end
