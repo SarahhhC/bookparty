@@ -13,7 +13,7 @@
 <body>
     <b class="top">
         <form method="post" action="/bookparty/storebookinfo_complete">
-            <input type = "hidden" name = "user_id" value = "<%= @user_id %>" >
+            <input type = "hidden" name = "user_id" value = "<%= session["user_id"] %>" >
             Title : <input type = "text" name = "booktitle"><br>
             Author : <input type = "text" name = "bookauthor"><br>
             Publisher : <input type = "text" name = "bookpublisher"><br>
