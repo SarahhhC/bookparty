@@ -3,25 +3,24 @@ class BookpartyController < ApplicationController
     end
     
     def signup_complete
-        #nil 확인
-        if params[:username].nil?
+        #빈값 확인 --> ""로 확인 / 생성확인 --> .nil?로 확인
+        if params[:username] == ""
           redirect_to '/bookparty/signup', alert: '정보미기입'
-        end
-        
-        #이메일 중복 확인
-        usermail_exist_check = User.find_by_usermail(params[:usermail])
-        if usermail_exist_check
-          redirect_to '/bookparty/signup', alert: '이메일이 이미 존재합니다.'
-        else
-          user = User.new
-          user.username = params[:username]
-          user.usermail = params[:usermail]
-          user.userpw = params[:userpw]
-          user.userschool = params[:userschool]
-          user.userphone = params[:userphone]
-          user.save
-          
-          redirect_to '/bookparty/login'
+        elsif params[:username] != ""
+            #이메일 중복 확인
+            usermail_exist_check = User.find_by_usermail(params[:usermail])
+            if usermail_exist_check
+              redirect_to '/bookparty/signup', alert: '이메일이 이미 존재합니다.'
+            elsif
+              user = User.new
+              user.username = params[:username]
+              user.usermail = params[:usermail]
+              user.userpw = params[:userpw]
+              user.userschool = params[:userschool]
+              user.userphone = params[:userphone]
+              user.save
+              redirect_to '/bookparty/login'
+            end
         end
     end
     
@@ -73,7 +72,10 @@ class BookpartyController < ApplicationController
         sellbook.bookpublisher = params[:bookpublisher]
         sellbook.bookprice = params[:bookprice]
         sellbook.bookstate = params[:bookstate]
-        sellbook.booksellterm = params[:booksellterm] #남은 기간 ~일 
+        sellbook.booksellterm = params[:booksellterm] #남은 기간 ~일
+        
+        #hashtag받아와서 처리
+        
         sellbook.save
         
         redirect_to '/bookparty/search'
