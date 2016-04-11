@@ -61,6 +61,10 @@ class BookpartyController < ApplicationController
         end
     end
     
+    #매물리스트 페이지
+    #def
+    #end
+    
     def storebookinfo
     end
     
@@ -73,10 +77,21 @@ class BookpartyController < ApplicationController
         sellbook.bookprice = params[:bookprice]
         sellbook.bookstate = params[:bookstate]
         sellbook.booksellterm = params[:booksellterm] #남은 기간 ~일
+        sellbook.save
         
         #hashtag받아와서 처리
-        
-        sellbook.save
+        #hashtag ','로 split해서 tags배열에 저장
+        list = params[:hashtag].split(",")
+        #각 tag마다 Tags저장 + Tags_Sellbook에 저장
+        list.each do |tag|
+            #tokenizer 한거를 Tag db에 넣는다
+            hashtag = Tag.create(:tagname => tag)
+            #tags_sellbook 디비에 연결한다
+            t_s = TagsSellbook.new
+            t_s.tag_id = hashtag.id
+            t_s.sellbook_id = sellbook.id
+            t_s.save
+        end
         
         redirect_to '/bookparty/search'
     end
