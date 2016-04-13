@@ -61,9 +61,20 @@ class BookpartyController < ApplicationController
         end
     end
     
-    #매물리스트 페이지
-    #def
-    #end
+    #태그 검색바의 값 받아서 매물리스트 뿌려주는 페이지(태그검색 결과페이지)
+    def tagresult
+        @tagSearch = params[:tagSearch]
+        #sellbook & sellbooks_tags 조인하여 해당하는 행 리턴
+        @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch}).take
+        
+        if @sellbook.nil?
+            @showno = "존재하지 않는 태그입니다."
+        else
+            @showyes = @tagSearch+" 에 대한 검색결과입니다. "
+            #view에서 뿌려주기 위해
+            @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch})
+        end
+    end
     
     def storebookinfo
     end
@@ -77,22 +88,18 @@ class BookpartyController < ApplicationController
         sellbook.bookprice = params[:bookprice]
         sellbook.bookstate = params[:bookstate]
         sellbook.booksellterm = params[:booksellterm] #남은 기간 ~일
-        sellbook.save
         
-        #hashtag받아와서 처리
+        #hashtag 받아와서 처리
         #hashtag ','로 split해서 tags배열에 저장
         list = params[:hashtag].split(",")
-        #각 tag마다 Tags저장 + Tags_Sellbook에 저장
-        list.each do |tag|
+        #각 tag마다 Tags저장 + Sellbooks_Tag 디비에 저장
+        list.each do |t|
             #tokenizer 한거를 Tag db에 넣는다
-            hashtag = Tag.create(:tagname => tag)
-            #tags_sellbook 디비에 연결한다
-            t_s = TagsSellbook.new
-            t_s.tag_id = hashtag.id
-            t_s.sellbook_id = sellbook.id
-            t_s.save
+            hashtag = Tag.create(:tagname => t)
+            sellbook.tags << hashtag
         end
         
+        sellbook.save
         redirect_to '/bookparty/search'
     end
 end

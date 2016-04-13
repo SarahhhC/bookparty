@@ -11,31 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160408113546) do
+ActiveRecord::Schema.define(version: 20160412133410) do
 
-  create_table "sellbooks", force: :cascade do |t|
-    t.string   "booktitle"
-    t.string   "bookauthor"
-    t.string   "bookpublisher"
-    t.integer  "bookprice"
-    t.integer  "bookstate"
-    t.integer  "booksellterm"
-    t.integer  "user_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  create_table "tags", force: :cascade do |t|
-    t.string   "tagname"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "tags_sellbooks", force: :cascade do |t|
-    t.integer  "tag_id"
-    t.integer  "sellbook_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+  PRAGMA FOREIGN_KEYS = ON;
+  create_table "sellbook_tags", force: :cascade do |t|
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
   end
 
   create_table "users", force: :cascade do |t|
@@ -45,8 +26,41 @@ ActiveRecord::Schema.define(version: 20160408113546) do
     t.string   "userpw"
     t.string   "usermail"
     t.string   "userphone"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
+  end
+
+  create_table "sellbooks", force: :cascade do |t|
+    t.string   "booktitle"
+    t.string   "bookauthor"
+    t.string   "bookpublisher"
+    t.integer  "bookprice"
+    t.integer  "bookstate"
+    t.integer  "booksellterm"
+    t.integer  "user_id",       :foreign_key=>{:references=>"users", :name=>"fk_sellbooks_user_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__sellbooks_user_id"}
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "tagname"
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
+  end
+  
+  #real
+  create_table "sellbooks_tags", force: :cascade do |t|
+    t.integer  "tag_id",      :foreign_key=>{:references=>"tags", :name=>"fk_sellbooks_tags_tag_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__sellbooks_tags_tag_id"}
+    t.integer  "sellbook_id", :foreign_key=>{:references=>"sellbooks", :name=>"fk_sellbooks_tags_sellbook_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__sellbooks_tags_sellbook_id"}
+    t.datetime "created_at",  :null=>false
+    t.datetime "updated_at",  :null=>false
+  end
+
+  create_table "tags_sellbooks", force: :cascade do |t|
+    t.integer  "tag_id",      :foreign_key=>{:references=>"tags", :name=>"fk_tags_sellbooks_tag_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__tags_sellbooks_tag_id"}
+    t.integer  "sellbook_id", :foreign_key=>{:references=>"sellbooks", :name=>"fk_tags_sellbooks_sellbook_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__tags_sellbooks_sellbook_id"}
+    t.datetime "created_at",  :null=>false
+    t.datetime "updated_at",  :null=>false
   end
 
 end

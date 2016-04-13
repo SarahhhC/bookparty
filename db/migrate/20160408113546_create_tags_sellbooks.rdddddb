@@ -1,8 +1,8 @@
 class CreateTagsSellbooks < ActiveRecord::Migration
   def change
     create_table :tags_sellbooks do |t|
-      t.integer :tag_id
-      t.integer :sellbook_id
+      t.belongs_to :tag
+      t.belongs_to :sellbook
       
       t.timestamps null: false
     end

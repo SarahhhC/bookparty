@@ -1,0 +1,8 @@
+class CreateSellbookTags < ActiveRecord::Migration
+  def change
+    create_table :sellbook_tags do |t|
+
+      t.timestamps null: false
+    end
+  end
+end

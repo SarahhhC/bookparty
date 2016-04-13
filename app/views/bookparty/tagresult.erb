@@ -1,0 +1,26 @@
+    <!-- 해당 태그가 존재하지 않을때 -->
+    <% if @showno %>
+        <center>
+        <div class="showNo">
+            <%=@showno %>
+        </div>
+        </center>
+    <%end%>
+
+    <!-- 검색 태그 관련 매물리스트 -->
+    <br><br>
+    <!-- 해당 태그가 존재 할 때 -->
+    <% if @sellbook %>
+        <div class="showYes">
+            <%=@showyes %>
+        </div>
+        <% @sellbook %>
+        <% @sellbook.each do |x| %>
+            <%= x.booktitle %> <br>
+            <%= x.bookauthor %> <br>
+            <%= x.bookpublisher %> <br>
+            <%= x.bookprice %> <br>
+            <%= x.bookstate %> <br>
+            <%= x.booksellterm %> <br>
+        <% end %>
+    <% end %>    
