@@ -12,15 +12,16 @@
     <!-- 해당 태그가 존재 할 때 -->
     <% if @sellbook %>
         <div class="showYes">
-            <%=@showyes %>
+            <h2> <%=@showyes %> </h2>
         </div>
         <% @sellbook %>
         <% @sellbook.each do |x| %>
-            <%= x.booktitle %> <br>
-            <%= x.bookauthor %> <br>
-            <%= x.bookpublisher %> <br>
-            <%= x.bookprice %> <br>
-            <%= x.bookstate %> <br>
-            <%= x.booksellterm %> <br>
+            <p>책 제목 : <%= x.booktitle %> </p> <br>
+            <p>책 저자 :<%= x.bookauthor %> </p> <br>
+            <p>책 출판사 <%= x.bookpublisher %> </p> <br>
+            <p>책 가격 : <%= x.bookprice %> 원 </p> <br>
+            <p>책 상태 : <%= x.bookstate %> </p> <br>
+            <p>경매 기간 : <%= x.booksellterm %> </p> <br>
+            <hr>
         <% end %>
     <% end %>    
