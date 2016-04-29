@@ -70,7 +70,7 @@ class BookpartyController < ApplicationController
         if @sellbook.nil?
             @showno = "존재하지 않는 태그입니다."
         else
-            @showyes = @tagSearch+" 에 대한 검색결과입니다. "
+            @showyes = @tagSearch + " 에 대한 검색결과입니다. "
             #view에서 뿌려주기 위해
             @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch})
         end

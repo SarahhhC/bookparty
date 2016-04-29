@@ -14,21 +14,9 @@
               alert("Changed a tag: " + tag);
             }
             $(function() {
-        
               $('#tags_1').tagsInput();
             });
       </script>
-      <style>
-          .dggggg {
-              display: inline-block;
-          }
-          .nameing {
-              display: inline-block;
-          }
-          .hashtag {
-              display: inline-block;
-          }
-      </style>
 </head>
 <body>
     <b class="top">
@@ -41,9 +29,11 @@
             State : <input type = "text" name = "bookstate"><br>
             Sellterm : <input type = "text" name = "booksellterm"><br>
             <!-- 해시태그 입력 (아래의 스크립트 먹도록 수정하기 )-->
-            <div class = "dggggg" display="inline-block">
-                <div class="nameing" display="inline-block"> HashTag : </div> 
-                <div class="hashtag" display="inline-block"><input id="tags_1" type = "text" class="tags" name = "hashtag"> </div>
+            <div class = "hashtag-parent" >
+                <div class="hashtag-nameing" > HashTag : </div> 
+                <div class="hashtag-input" >
+                    <input id="tags_1" type = "text" class="tags" name = "hashtag"> 
+                </div>
             </div>
             <br>
             <input type="submit" value="등록하기">
