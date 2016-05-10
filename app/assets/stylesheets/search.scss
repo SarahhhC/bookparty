@@ -1,3 +1,8 @@
+body {
+    background-image: url('/images/bg.png');
+    background-repeat:no-repeat;
+    background-size:cover;
+}
 .top {
     display:block;
     font-size :30pt; 
@@ -7,9 +12,49 @@
     background-color:white ;  
     text-align:center;
 }
-
-.mailinfo {
-    font-family:"Times New Roman";
-    font-size :15pt;
-    margin-top:300px;
+form{
+    margin-top: 62px;
+    margin-bottom: 80px;
 }
+.c-form-search {
+    margin-right:auto; margin-left:auto;
+    width : 350px;
+    height : 45px;
+    font-size : 15pt;
+    margin-right: -5px;
+    border: none;
+}
+.c-form-submit {
+    height: 48px;
+    width: 48px;
+    background-color: #011940;
+    border: none;
+    margin-bottom: -16px;
+}
+.title {
+    font-size: 64pt;
+    color : white;
+    margin :auto;
+    text-align: center;
+    margin-top: 60px;
+}
+h2 {
+    color : white;
+    text-align: center;
+    margin-top: 80px;
+}
+.users {
+    color : white;
+    float : right;
+}
+
+#storebtn{
+    float: left;
+    margin-top: -30px;
+    width: 100px;
+    height: 60px;
+}
+.position{
+    margin :auto;
+}
+    

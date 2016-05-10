@@ -1,3 +1,8 @@
+ <head>
+     <title>태그결과창 </title>
+        <%= javascript_include_tag 'countdown' %>
+ </head>
+ <body>
     <!-- 해당 태그가 존재하지 않을때 -->
     <% if @showno %>
         <center>
@@ -16,11 +21,18 @@
         </div>
         <% @sellbook %>
         <% @sellbook.each do |x| %>
+            <!-- now는 현재시간 endtime은 종료시간 -->
+            <% Time.zone = 'Seoul'
+                now = Time.zone.now
+                endtime = x.created_at + x.booksellterm*24.hours
+                deadline = endtime.to_i - now.to_i %>
+                
             <p><% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
             <% sellboook_tag.each do |t| %>
                 <% taglist = Tag.find(t.tag_id) %>
                 #<%= taglist.tagname %>
             <% end %></p> <br>
+            
             <p>책 제목 : <%= x.booktitle %> </p> <br>
             <p>책 저자 :<%= x.bookauthor %> </p> <br>
             <p>책 출판사 <%= x.bookpublisher %> </p> <br>
@@ -33,8 +45,68 @@
             <% elsif x.bookstate == 3 %>
                 <p>책 상태 : "하" </p> <br>
             <% end %>
-    
-            <p>경매 기간 : <%= x.booksellterm %> </p> <br>
+                
+            <!-- func -->
+    	    <script>
+                $(function () {
+                    $('#<%= x.id %>').countdown({until: +<%= deadline %>});
+                    
+                    $('#'+"startAuction"+<%= x.id %>).click(function(){
+                        $('#'+"Auction_open"+<%= x.id %>).show();
+                        console.log("open startAuction modal"+<%= x.id %>);
+                    });
+                    
+                    $('#'+"startExactBuy"+<%= x.id %>).click(function(){
+                        $('#'+"ExactBuy_open"+<%= x.id %>).show();
+                        console.log("open startExactBuy modal"+<%= x.id %>);
+                    });
+                    
+                    $('#'+"joinAuction"+<%= x.id %>).click(function(){
+                        $('#' + "Auction_open" + <%= x.id %>).hide();
+                        //price update
+                        console.log("join!"+<%= x.id %>);
+                    });
+                    
+                    $('.close').click(function(){
+                        $('#' + "Auction_open" + <%= x.id %>).hide();
+                        $('#' + "ExactBuy_open" + <%= x.id %>).hide();
+                        console.log("click");
+                    });
+                });
+            </script>
+            <!-- deadline countdown -->
+            <p>경매 기간 : <div id = "<%= x.id %>"></div></p> <br>
+            
+            <!-- Trigger/Open The Modal -->
+            <input type="image" id = "<%= "startAuction"+(x.id).to_s %>" src="/images/actionbtn.png" width="85" height="35">
+            <input type="image" id = "<%= "startExactBuy"+(x.id).to_s %>" src="/images/sellbuynow.png" width="85" height="35">
+           
+            <!-- The Auction Modal -->
+            <div class = "modal" id = "<%= "Auction_open"+(x.id).to_s %>">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close" >x</span>
+                    <p><%= x.booktitle %></p>
+                        <p><b>현재가격  : <%= x.bookprice %> 원 </b></p>
+                        <p>즉구가격  : <%= x.nowbookprice %> 원 </p>
+                        입찰가격 : <input type = "text" name = "auctionprice"> 원 <br><br> 
+                        <input type="image" id = "<%= "joinAuction"+(x.id).to_s %>" src="/images/actionbtn.png" width="85" height="35">
+              </div>
+            </div>
+            
+            <!-- The ExactBuy Modal -->
+            <div class = "modal" id = "<%= "ExactBuy_open"+(x.id).to_s %>">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close" >x</span>
+                    <p><%= x.booktitle %></p>
+                        <p>현재가격  : <%= x.bookprice %> 원 </p>
+                        <p><b>즉구가격  : <%= x.nowbookprice %> 원 </b></p>
+              </div>
+            </div>
+            
             <hr>
         <% end %>
-    <% end %>    
+    <% end %>  
+</body>
+

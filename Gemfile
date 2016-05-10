@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'countdown'
+
 gem 'schema_auto_foreign_keys'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5'
