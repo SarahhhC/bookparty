@@ -20,9 +20,10 @@
 </head>
 <body>
     <b class="top">
-        <form method="post" action="/bookparty/storebookinfo_complete">
+        <form method="post" action="/bookparty/storebookinfo_complete" enctype="multipart/form-data">
             <input type = "hidden" name = "user_id" value = "<%= session["user_id"] %>" >
             Title : <input type = "text" name = "booktitle"><br>
+            image upload : <input type = "file" name = "image_file"> <br>
             Author : <input type = "text" name = "bookauthor"><br>
             Publisher : <input type = "text" name = "bookpublisher"><br>
             Price : <input type = "text" name = "bookprice"><br>

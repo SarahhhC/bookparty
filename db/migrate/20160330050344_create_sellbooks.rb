@@ -2,6 +2,7 @@ class CreateSellbooks < ActiveRecord::Migration
   def change
     create_table :sellbooks do |t|
       t.string :booktitle
+      t.string :book_image
       t.string :bookauthor
       t.string :bookpublisher
       t.integer :bookprice

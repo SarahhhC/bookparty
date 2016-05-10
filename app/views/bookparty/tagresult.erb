@@ -22,6 +22,8 @@
                 #<%= taglist.tagname %>
             <% end %></p> <br>
             <p>책 제목 : <%= x.booktitle %> </p> <br>
+            <p>책 image : </p>
+            <img src="<%= x.book_image.url %>" width="100px" height="200px"> <br>
             <p>책 저자 :<%= x.bookauthor %> </p> <br>
             <p>책 출판사 <%= x.bookpublisher %> </p> <br>
             <p>책 가격 : <%= x.bookprice %> 원 </p> <br>
@@ -35,6 +37,10 @@
             <% end %>
     
             <p>경매 기간 : <%= x.booksellterm %> </p> <br>
+            
+            <%= x.created_at %>
             <hr>
         <% end %>
     <% end %>    
+    
+    <div id="countdowntimer"><span id="future_date"><span></div>   

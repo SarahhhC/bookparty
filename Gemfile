@@ -1,5 +1,10 @@
 source 'https://rubygems.org'
-
+#image resizing
+gem 'mini_magick'
+#image upload to Amazon - carrrier wave
+gem 'carrierwave'
+#connect to Amazon - carrrier wave
+gem 'fog'
 gem 'schema_auto_foreign_keys'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5'

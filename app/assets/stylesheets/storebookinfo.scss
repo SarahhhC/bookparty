@@ -16,3 +16,9 @@
 .hashtag-input {
     display: inline-block;
 }
+
+input[type='file'] {
+  border: 1px solid #d1d1d1;
+  padding: .5em;
+  border-radius: .3em;
+}

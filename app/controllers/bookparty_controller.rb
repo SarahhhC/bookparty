@@ -75,7 +75,7 @@ class BookpartyController < ApplicationController
             @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch})
         end
     end
-    
+	  
     def storebookinfo
     end
     
@@ -83,6 +83,7 @@ class BookpartyController < ApplicationController
         sellbook = Sellbook.new
         sellbook.user_id = params[:user_id]
         sellbook.booktitle = params[:booktitle]
+        sellbook.book_image = params[:image_file]
         sellbook.bookauthor = params[:bookauthor]
         sellbook.bookpublisher = params[:bookpublisher]
         sellbook.bookprice = params[:bookprice]
@@ -98,7 +99,6 @@ class BookpartyController < ApplicationController
             hashtag = Tag.create(:tagname => t)
             sellbook.tags << hashtag
         end
-        
         sellbook.save
         redirect_to '/bookparty/search'
     end
