@@ -70,7 +70,7 @@ class BookpartyController < ApplicationController
         if @sellbook.nil?
             @showno = "존재하지 않는 태그입니다."
         else
-            @showyes = @tagSearch + " 에 대한 검색결과입니다. "
+            @showyes = @tagSearch
             #view에서 뿌려주기 위해
             @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch})
         end
@@ -102,5 +102,16 @@ class BookpartyController < ApplicationController
         end
         sellbook.save
         redirect_to '/bookparty/search'
+    end
+    
+    def auction_price_update
+        sellbook_update = Sellbook.find(params[:id])
+        sellbook_update.bookprice = params[:bookprice] #입찰가 받아오기
+        sellbook_update.save
+        
+        #render :js => "window.location = '/bookparty/tagresult?tagname='"
+        render :json => {"result" => "success", "sellbook" => sellbook_update}
+        #redirect_to '/bookparty/tagresult?tagname=@@tagSearch'
+        
     end
 end

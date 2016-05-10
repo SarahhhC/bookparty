@@ -1,121 +1,144 @@
- <head>
-     <title>태그결과창 </title>
-        <%= javascript_include_tag 'countdown' %>
- </head>
- <body>
-    <!-- 해당 태그가 존재하지 않을때 -->
-    <% if @showno %>
-        <center>
-        <div class="showNo">
-            <%=@showno %>
-        </div>
-        </center>
-    <% end %>
+<head>
+  <title>태그결과창 </title>
+  <%= javascript_include_tag 'countdown' %>    
+</head>
+<body>
+  <!-- 해당 태그가 존재하지 않을때 -->
+  <% if @showno %>
+      <center>
+          <div class="showNo">
+              <%=@showno %>
+          </div>
+      </center>
+  <% end %>
 
-    <!-- 검색 태그 관련 매물리스트 -->
-    <br><br>
+  <!-- 검색 태그 관련 매물리스트 -->
+  <br><br>
     <!-- 해당 태그가 존재 할 때 -->
-    <% if @sellbook %>
-        <div class="showYes">
-            <h2> <%=@showyes %> </h2>
-        </div>
-        <% @sellbook %>
-        <% @sellbook.each do |x| %>
-            <!-- now는 현재시간 endtime은 종료시간 -->
-            <% Time.zone = 'Seoul'
-                now = Time.zone.now
-                endtime = x.created_at + x.booksellterm*24.hours
-                deadline = endtime.to_i - now.to_i %>
-                
-            <p><% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
+  <% if @sellbook %>
+    <div class="showYes">
+        <h2> <%=@showyes %> 에 대한 검색결과입니다.  </h2>
+    </div>
+    <% @sellbook %>
+    <% @sellbook.each do |x| %>
+        <!-- now는 현재시간 endtime은 종료시간 deadline은 반복문이 도는 기간 -->
+        <% Time.zone = 'Seoul'
+            now = Time.zone.now
+            endtime = x.created_at + x.booksellterm*24.hours
+            deadline = endtime.to_i - now.to_i %>
+              
+        <p id = 'endstate'>종료된 매물입니다. </p>
+          
+        <% if deadline <= 0 %> <!-- deadline끝나면 경매 종료 -->
+            <script>
+                $('#endstate').css({"display": "inline"});
+            </script>
+        <% end %>
+        <p>
+            <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
             <% sellboook_tag.each do |t| %>
                 <% taglist = Tag.find(t.tag_id) %>
                 #<%= taglist.tagname %>
-            <% end %></p> <br>
-            
-            <p>책 제목 : <%= x.booktitle %> </p> <br>
-            <p>책 image : </p>
-            <img src="<%= x.book_image.url %>" width="100px" height="200px"> <br>
-            <p>책 저자 :<%= x.bookauthor %> </p> <br>
-            <p>책 출판사 <%= x.bookpublisher %> </p> <br>
-            <p>책 가격 : <%= x.bookprice %> 원 </p> <br>
-            
-            <% if x.bookstate == 1 %>
-                <p>책 상태 : "상" </p> <br>
-            <% elsif x.bookstate == 2 %>
-                <p>책 상태 : "중" </p> <br>
-            <% elsif x.bookstate == 3 %>
-                <p>책 상태 : "하" </p> <br>
             <% end %>
-
-            <p>경매 기간 : <%= x.booksellterm %> </p> <br>
-            
-            <%= x.created_at %>
-            <hr>
-    
-    <div id="countdowntimer"><span id="future_date"><span></div>   
-
-            <!-- func -->
-    	    <script>
-                $(function () {
-                    $('#<%= x.id %>').countdown({until: +<%= deadline %>});
-                    
-                    $('#'+"startAuction"+<%= x.id %>).click(function(){
-                        $('#'+"Auction_open"+<%= x.id %>).show();
-                        console.log("open startAuction modal"+<%= x.id %>);
-                    });
-                    
-                    $('#'+"startExactBuy"+<%= x.id %>).click(function(){
-                        $('#'+"ExactBuy_open"+<%= x.id %>).show();
-                        console.log("open startExactBuy modal"+<%= x.id %>);
-                    });
-                    
-                    $('#'+"joinAuction"+<%= x.id %>).click(function(){
-                        $('#' + "Auction_open" + <%= x.id %>).hide();
-                        //price update
-                        console.log("join!"+<%= x.id %>);
-                    });
-                    
-                    $('.close').click(function(){
-                        $('#' + "Auction_open" + <%= x.id %>).hide();
-                        $('#' + "ExactBuy_open" + <%= x.id %>).hide();
-                        console.log("click");
-                    });
-                });
-            </script>
-            <!-- deadline countdown -->
-            <p>경매 기간 : <div id = "<%= x.id %>"></div></p> <br>
-            
-            <!-- Trigger/Open The Modal -->
-            <input type="image" id = "<%= "startAuction"+(x.id).to_s %>" src="/images/actionbtn.png" width="85" height="35">
-            <input type="image" id = "<%= "startExactBuy"+(x.id).to_s %>" src="/images/sellbuynow.png" width="85" height="35">
-           
-            <!-- The Auction Modal -->
-            <div class = "modal" id = "<%= "Auction_open"+(x.id).to_s %>">
-              <!-- Modal content -->
-              <div class="modal-content">
-                <span class="close" >x</span>
-                    <p><%= x.booktitle %></p>
-                        <p><b>현재가격  : <%= x.bookprice %> 원 </b></p>
-                        <p>즉구가격  : <%= x.nowbookprice %> 원 </p>
-                        입찰가격 : <input type = "text" name = "auctionprice"> 원 <br><br> 
-                        <input type="image" id = "<%= "joinAuction"+(x.id).to_s %>" src="/images/actionbtn.png" width="85" height="35">
-              </div>
-            </div>
-            
-            <!-- The ExactBuy Modal -->
-            <div class = "modal" id = "<%= "ExactBuy_open"+(x.id).to_s %>">
-              <!-- Modal content -->
-              <div class="modal-content">
-                <span class="close" >x</span>
-                    <p><%= x.booktitle %></p>
-                        <p>현재가격  : <%= x.bookprice %> 원 </p>
-                        <p><b>즉구가격  : <%= x.nowbookprice %> 원 </b></p>
-              </div>
-            </div>
-            
-            <hr>
+        </p> <br>
+          
+        <p>책 제목 : <%= x.booktitle %> </p> <br>
+        <p>책 image : </p>
+            <img src="<%= x.book_image.url %>" width="100px" height="200px"> <br>
+        <p>책 저자 :<%= x.bookauthor %> </p> <br>
+        <p>책 출판사 <%= x.bookpublisher %> </p> <br>
+        <p>책 가격 : <%= x.bookprice %> 원 </p> <br>
+          
+        <% if x.bookstate == 1 %>
+            <p>책 상태 : "상" </p> <br>
+        <% elsif x.bookstate == 2 %>
+            <p>책 상태 : "중" </p> <br>
+        <% elsif x.bookstate == 3 %>
+            <p>책 상태 : "하" </p> <br>
         <% end %>
-    <% end %>  
+  
+          <!-- func -->
+        <script>
+          $(function () {
+              var id = <%= x.id %>;
+              
+              $('#' + id).countdown({until: +<%= deadline %>});
+              
+              $('#' + "startAuction" + id).click(function() {
+                  $('#' + "Auction_open" + id).show();
+              });
+              
+              $('#' + "startExactBuy" + id).click(function() {
+                  $('#' + "ExactBuy_open" + id).show();
+              });
+              
+              $('#' + "joinAuction" + id).click(function() {
+                  var update_class = $('.modal-content'); //수정할 값이 있는 클래스 선언
+                  var bookprice = update_class.find('.'+'auction-update'+id).val(); 
+                  if (<%= x.bookprice %> <= bookprice) {
+                    $.ajax({
+                      type: "POST",		//요청방식
+                      url: "/bookparty/auction_price_update",	//요청URL
+                      data: {
+                        //왼쪽꺼는 controller의 params[:이름] 이랑 일치해야함 무조건!!!
+                        id: id,
+                        bookprice: bookprice
+                      },
+                      dataType:"json", //응답데이타타입
+                      
+                      success: function(result) {	//정상응답일 경우
+                        window.location.href = '/bookparty/tagresult?tagSearch=<%= @showyes %>';
+                        return true;
+                      },
+                      error: function(result) {	//에러응답일 경우
+                        alert("서버에 문제가 발생했습니다.");
+                        console.log(result);
+                        return false;
+                      }
+                    });
+                      $('#' + "Auction_open" + id).hide();
+                  }
+                  else
+                    alert("입찰가를 현재가보다 높게 불러주세요!");
+              });
+              
+              $('.close').click(function() {
+                  $('#' + "Auction_open" + id).hide();
+                  $('#' + "ExactBuy_open" + id).hide();
+              });
+          });
+        </script>
+        <!-- deadline countdown -->
+        <p>경매 기간 : <div id = "<%= x.id %>"></div> </p> <br>
+        
+        <!-- 입찰하기, 즉구 버튼 Trigger/Open The Modal -->
+        <input type="image" id = "<%= "startAuction"+(x.id).to_s %>" src="/images/actionbtn.png" width="85" height="35">
+        <input type="image" id = "<%= "startExactBuy"+(x.id).to_s %>" src="/images/sellbuynow.png" width="85" height="35">
+       
+        <!-- The Auction Modal (입찰하기버튼 눌렀을 때)-->
+        <div class = "modal" id = "<%= "Auction_open"+(x.id).to_s %>">
+          <div class="modal-content">
+              <span class="close" > x </span>
+              <p> <%= x.booktitle %> </p>
+              <img src="<%= x.book_image.url %>" width="100px" height="200px"> <br>
+              <p> <b>현재가격  : <%= x.bookprice %> 원 </b> </p>
+              <p> 즉구가격  : <%= x.nowbookprice %> 원 </p>
+              <p> 입찰가격 : <input type = "text" class = "<%= "auction-update"+(x.id).to_s %>" name = "bookprice"> 원 </p> <br><br> 
+              <input type="image" id = "<%= "joinAuction"+(x.id).to_s %>" data-id = "<%= x.id %>" src="/images/actionbtn.png" width="85" height="35">
+          </div>
+        </div>
+          
+        <!-- The ExactBuy Modal (즉구버튼 눌렀을 때)-->
+        <div class = "modal" id = "<%= "ExactBuy_open"+(x.id).to_s %>">
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close" >x</span>
+            <p><%= x.booktitle %></p>
+            <p>현재가격  : <%= x.bookprice %> 원 </p>
+            <p><b>즉구가격  : <%= x.nowbookprice %> 원 </b></p>
+          </div>
+        </div>
+          <hr>
+      <% end %> <!-- sellbook loop end -->
+  <% end %>  <!-- if end -->
 </body>
-
