@@ -87,6 +87,7 @@ class BookpartyController < ApplicationController
         sellbook.bookauthor = params[:bookauthor]
         sellbook.bookpublisher = params[:bookpublisher]
         sellbook.bookprice = params[:bookprice]
+        sellbook.nowbookprice = params[:nowbookprice]
         sellbook.bookstate = params[:bookstate]
         sellbook.booksellterm = params[:booksellterm] #남은 기간 ~일
         

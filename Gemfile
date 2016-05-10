@@ -5,6 +5,9 @@ gem 'mini_magick'
 gem 'carrierwave'
 #connect to Amazon - carrrier wave
 gem 'fog'
+
+gem 'countdown'
+
 gem 'schema_auto_foreign_keys'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5'

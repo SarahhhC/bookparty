@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20160412133410) do
     t.string   "bookauthor"
     t.string   "bookpublisher"
     t.integer  "bookprice"
+    t.integer  "nowbookprice"
     t.integer  "bookstate"
     t.integer  "booksellterm"
     t.integer  "user_id",       :foreign_key=>{:references=>"users", :name=>"fk_sellbooks_user_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__sellbooks_user_id"}
