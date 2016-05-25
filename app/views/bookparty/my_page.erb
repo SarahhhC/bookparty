@@ -1,0 +1,120 @@
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<body>
+  <center><h1>My Page</h1></center>
+  <div class = "current-user"  style="display: inline-block; float: right">
+    <div class = "userface" style = "display: inline-block" > <img width="30px" height="30px" src="/images/current-user.png" alt="current-user"> </div>
+    <div class ="username" style="display: inline-block; font-size: 30px"> <%= @username %> 님 </div>
+  </div>
+  
+  <br><br>
+
+  <div class="tabmenu">
+    <ul>
+        <li><a href="#link"><img src="/images/selltab.png" alt="판매할 책" /></a>
+            <ul class="tabcontent">
+                <% @sellbook %>
+                <div class = "sell-book-list" >
+                  <% @sellbook.reverse_each do |x| %>
+                    <div class="row">
+                      <div class="col-sm-6" style="">
+                        <div class="thumbnail" style="width: 500px; height: 300px;">
+                          <div class="thumbnail-image" style="display: inline-block; width: 150px; height: 300px; margin-bottom: 20px;">
+                            <img src="<%= x.book_image.url %>" width="100px" height="200px" alt="책사진">
+                          </div>
+                          <div class="caption" style="display: inline-block;">
+                            <h4><%= x.booktitle %></h4>
+                            <p> 관련 태그 
+                              <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
+                              <% sellboook_tag.each do |t| %>
+                                <% taglist = Tag.find(t.tag_id) %>
+                                #<%= taglist.tagname %>
+                              <% end %> 
+                            </p>
+                            <p> 저자  <%= x.bookauthor %>  </p>
+                            <p> 현재가격  <%= x.bookprice %> 원 </p>
+                            <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
+                            <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+            </ul>
+        </li>
+        
+        <li><a href="#link"><img src="/images/buytab.png" alt="구매할 책" /></a>
+            <ul class="tabcontent">
+                <h1>구매한 책 탭!!!!!!!</h1>
+                <% @auction.each do |a| #최근 업데이트 한 순으로 재배열 필요 %>  
+                  <% @auction_book = Sellbook.where(id: a.sellbook_id) #auction의 sellbook_id와 같은 책정보수집 %> 
+                  <div class = "sell-book-list" >
+                    <% @auction_book.reverse_each do |x| %>
+                      <div class="row">
+                        <div class="col-sm-6" style="">
+                          <div class="thumbnail" style="width: 500px; height: 300px;">
+                            <div class="thumbnail-image" style="display: inline-block; width: 150px; height: 300px; margin-bottom: 20px;">
+                              <img src="<%= x.book_image.url %>" width="100px" height="200px" alt="책사진">
+                            </div>
+                            <div class="caption" style="display: inline-block;">
+                              <h4><%= x.booktitle %></h4>
+                              <p> 관련 태그 
+                                <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
+                                <% sellboook_tag.each do |t| %>
+                                  <% taglist = Tag.find(t.tag_id) %>
+                                  #<%= taglist.tagname %>
+                                <% end %> 
+                              </p>
+                              <p> 저자  <%= x.bookauthor %>  </p>
+                              <p> 현재가격  <%= x.bookprice %> 원 </p>
+                              <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
+                              <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+            </ul>
+        </li>
+    </ul>
+  </div>
+</body>
+
+<script>
+  $(document).ready(function() {
+    $(".tabmenu").each(function() {
+      var tab = $(this).children("ul");
+      var tabBtn = tab.children("li").children("a");
+      var content = tabBtn.nextAll();
+      
+      tabBtn.click(function(){ //탭버튼을 클릭했을때
+      
+      if( $(this).hasClass("on") ) return; // 이미 on 상태면 pass
+      content.hide(); // 모든 컨텐츠 부분을 안보이게 한뒤
+  
+      $(this).nextAll().show(); // 클릭한 tab 버튼(a태그) 옆의 모든 태그들은 보이도록
+      tabBtn.removeClass("on"); // 모든탭 버튼에 있던 on 클래스를 빼고
+      $(this).addClass("on"); // 현재 클릭한 탭메뉴 버튼에 on 클래스 추가
+        // 탭버튼를 쭉 돌면서 on 클래스가 있는 버튼만 on 이미지로 바꾸고
+        // 나머지 버튼들은 off 이미지로 바꾼다.
+        tabBtn.each(function() {
+          var src;
+          var img = $(this).children("img");
+          if( $(this).hasClass("on") ) {
+            src = img.attr("src").replace("_off.", "_on.");
+          } else {
+            src = img.attr("src").replace("_on.", "_off.");
+          }
+          img.attr("src", src);
+        });
+      });
+      // 맨첫번째 탭버튼 클릭처리
+      tabBtn.eq(0).click();
+    });
+  });
+</script>

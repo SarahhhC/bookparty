@@ -1,28 +1,53 @@
 <head>
-    <meta charset="UTF-8">
-    <title>test1</title>
-
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheet/search.css" />
+  <!--script type="text/javascript" src="/javascript/jquery.fullpage.js"></script>
+  <script type="text/javascript">
+  	$(document).ready(function() {
+      $('#fullpage').fullpage({
+      	slidesColor: ['#1bbc9b', '#4BBFC3', '#7BAABE', 'whitesmoke', '#ccddff'],
+      	anchors: ['firstPage', 'secondPage', '3rdPage', '4thpage', 'lastPage'],
+      	menu: '#menu',
+      	easing: 'easeOutBack'	
+      });
+    });
+</script-->
 </head>
+    
 <body>
-    <% unless @userid.nil? %>
-
-        <a class="users" href="/bookparty/logout">logout...</a><br>
+  <!-- div id="fullpage" -->
+    <!-- div class="section" id="section0"-->
+      <% unless @userid.nil? %>
+        <a class="users" href="/bookparty/logout" style="text-decoration:none; font-size: 15px" >Logout</a><br>
         <p class="users"><%= @username %>님 환영합니다.</p><br>
         <a href="/bookparty/storebookinfo"><input type = "image" id="storebtn" src="/images/storebookinfo.png"></a>
+        <a class = "my_page" href="/bookparty/my_page">
+          <input type = "image" id="mypagebtn" src="/images/mypage.png" style="margin-left: 15px;">
+        </a>
         <p class="title">책파리 피플</p><br>
-        <h2>모두가 합리적인 중고책거래를 할 수 있습니다!<br>지금부터 시작해 보세요. </h2>
-    <% else %>
-        <h2> <%= @alertNonUser %> </h2>
-    <% end %>
-    
-    <!-- 검색 bar -->
-    
-    <!-- 검색 parameter를 tagresult로 날려준다 -->
-    <center>
-    <form action="/bookparty/tagresult" method="POST">
-        <input type="text" class="c-form-search" name ="tagSearch" placeholder="책제목 , 학교이름을 입력하세요." required />
-        <input type="image" class = "c-form-submit" src="/images/search.png" alt="Submit" width="48" height="48">
-    </form>
-    </center>
+        <h2>모두가 합리적인 중고책거래를 할 수 있습니다!<br>지금부터 시작해 보세요.</h2>
+      <% else %>
+          <h2> <%= @alertNonUser %> </h2>
+      <% end %>
+      <center> <!-- 검색바 - parameter를 tagresult로 날려준다 -->
+        <form action="/bookparty/tagresult" method="POST">
+            <input type="text" class="c-form-search" name ="tagSearch" placeholder=" 책제목 , 학교이름을 입력하세요." required />
+            <input type="image" class = "c-form-submit" src="/images/search.png" alt="Submit" width="48" height="48">
+        </form>
+      </center>
+    <!-- /div -->
+    <!-- div class="section" id="section1">
+      <div class="intro">
+  			<h1>북파티 사용방법</h1>
+  			<p>This example is working with `easeOutBack` effect instead of the default</p>
+  			<p>You can see more about them <a href="http://jqueryui.com/resources/demos/effect/easing.html" target="_blank">here</a></p>
+		  </div>
+    </div -->
+    <!-- div class="section" id="section2">
+  		<div class="intro">
+  			<h1>Cool uh?</h1>
+  			<p>Choose the best easing effect for your site!</p>
+  		</div>
+	  </div -->
+  <!-- /div -->
 </body>
-

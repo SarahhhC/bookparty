@@ -12,4 +12,14 @@
  *
  *= require_tree .
  *= require_self
+ *= require bootstrap-datepicker3
+ *= require jquery/clockpicker
  */
+
+@import url(https://fonts.googleapis.com/css?family=Exo+2:400,900,400italic,900italic);
+@import url(https://cdn.rawgit.com/theeluwin/NotoSansKR-Hestia/master/stylesheets/NotoSansKR-Hestia.css);
+
+body {
+    font-family: 'Exo 2', 'Noto-Sans', 'Apple SD Gothic Neo', NanumGothic, 'Malgun Gothic', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased !important;
+}

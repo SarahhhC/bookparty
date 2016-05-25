@@ -1,11 +1,15 @@
 source 'https://rubygems.org'
+#timepicker
+gem 'clockpicker-rails'
+#datepicker
+gem 'bootstrap-datepicker-rails'
 #image resizing
 gem 'mini_magick'
 #image upload to Amazon - carrrier wave
 gem 'carrierwave'
 #connect to Amazon - carrrier wave
 gem 'fog'
-
+#countdown
 gem 'countdown'
 
 gem 'schema_auto_foreign_keys'

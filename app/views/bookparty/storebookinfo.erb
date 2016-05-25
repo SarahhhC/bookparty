@@ -1,47 +1,64 @@
 <head>
-    <meta charset="UTF-8">
-        <title>판매</title>
-        <link rel="stylesheet" type="text/css" href="/assets/stylesheet/jquery.tagsinput.css" />
-        <script type="text/javascript" src="/assets/javascript/jquery.tagsinput.js"></script>
-        <script type="text/javascript">
-            function onAddTag(tag) {
-              alert("Added a tag: " + tag);
-            }
-            function onRemoveTag(tag) {
-              alert("Removed a tag: " + tag);
-            }
-            function onChangeTag(input,tag) {
-              alert("Changed a tag: " + tag);
-            }
-            $(function() {
-              $('#tags_1').tagsInput();
-            });
-      </script>
+  <meta charset="UTF-8">
+  <title>판매</title>
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheet/jquery.tagsinput.css" />
+  <script type="text/javascript" src="/assets/javascript/jquery.tagsinput.js"></script>
+  <script src="/javascript/jquery.min.js"></script>
+  <script type="text/javascript">
+    function onAddTag(tag) {
+      alert("Added a tag: " + tag);
+    }
+    
+    function onRemoveTag(tag) {
+      alert("Removed a tag: " + tag);
+    }
+      
+    function onChangeTag(input,tag) {
+      alert("Changed a tag: " + tag);
+    }
+      
+    $(function() {
+      $('#tags_1').tagsInput();
+    });
+  </script>
 </head>
+
 <body>
-    <b class="top">
-        <form method="post" action="/bookparty/storebookinfo_complete" enctype="multipart/form-data">
-            <input type = "hidden" name = "user_id" value = "<%= session["user_id"] %>" >
-            Title : <input type = "text" name = "booktitle"><br>
-            image upload : <input type = "file" name = "image_file"> <br>
-            Author : <input type = "text" name = "bookauthor"><br>
-            Publisher : <input type = "text" name = "bookpublisher"><br>
-            AuctionPrice : <input type = "text" name = "bookprice"><br>
-            Nowprice :  <input type = "text" name = "nowbookprice"><br>
-            State : <input type = "text" name = "bookstate"><br>
-            Sellterm : <input type = "text" name = "booksellterm"><br>
-            <!-- 해시태그 입력 (아래의 스크립트 먹도록 수정하기 )-->
-            <div class = "hashtag-parent" >
-                <div class="hashtag-nameing" > HashTags : </div> 
-                <div class="hashtag-input" >
-                    <input id="tags_1" type = "text" class="tags" name = "hashtag"> 
-                </div>
-            </div>
-            <br>
-            <input type="submit" value="등록하기">
-        </form>
-    </b>
+  <b class="top">
+    <form method="post" action="/bookparty/storebookinfo_complete" enctype="multipart/form-data">
+      <input type = "hidden" name = "user_id" value = "<%= session["user_id"] %>" >
+        책 제목 : <input type = "text" name = "booktitle"><br><br>
+        책 사진 : <input type = "file" name = "image_file"> <br><br>
+        저자 : <input type = "text" name = "bookauthor"><br><br>
+        출판사 : <input type = "text" name = "bookpublisher"><br><br>
+        시작가 : <input type = "text" name = "bookprice"><br><br>
+        즉구가:  <input type = "text" name = "nowbookprice"><br><br>
+        책 상태 : <input type = "text" name = "bookstate"><br><br>
+        경매종료일 : <input type="text" class='datepicker' name = "booksellterm_date">
+                     <input type="text" id="clock" name = "booksellterm_time">
+
+        <br><br>
+        
+        <div class = "hashtag-parent" >
+          <div class="hashtag-nameing" > HashTags : </div> 
+          <div class="hashtag-input" >
+              <input id="tags_1" type = "text" class="tags" name = "hashtag"> 
+          </div>
+        </div>
+        <br><br>
+        <input type="submit" value="등록하기">
+    </form>
+  </b>
 </body>
 
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
+  });
+</script>
 
-
+<script type="text/javascript">
+$('#clock').clockpicker({
+    autoclose: true
+});
+</script>
