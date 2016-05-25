@@ -135,9 +135,12 @@ class BookpartyController < ApplicationController
     @userid = session[:user_id]
     @username = User.find(@userid).username
     
-    #current-user가 판매할 책
-    @sellbook = Sellbook.where(user_id: @userid)
+    #current-user가 판매할 책 - 남은시간의 "최신순"으로 정렬시킨다 
+    @sellbook = Sellbook.where(user_id: @userid).order('booksellterm ASC')
+    
     #current-user가 참여한 경매 리스트
     @auction = Auction.where(user_id: @userid)
+    
+    @close = Array.new
   end
 end

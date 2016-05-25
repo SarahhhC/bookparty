@@ -108,8 +108,11 @@
         <!-- deadline countdown -->
         <p>경매 기간 : <div id = "<%= x.id %>"></div> </p> <br>
         <!-- 입찰하기, 즉구 버튼 Trigger/Open The Modal -->
-        <input type="image" id = "<%= "startAuction"+(x.id).to_s %>" src="/images/actionbtn.png" width="85" height="35">
-        <input type="image" id = "<%= "startExactBuy"+(x.id).to_s %>" src="/images/sellbuynow.png" width="85" height="35">
+        <!-- case-같은 계정일 때 - 책 올린사람이 입찰 못하게! -->
+        <% if x.user_id != session[:user_id] %>
+          <input type="image" id = "<%= "startAuction"+(x.id).to_s %>" src="/images/actionbtn.png" width="85" height="35">
+          <input type="image" id = "<%= "startExactBuy"+(x.id).to_s %>" src="/images/sellbuynow.png" width="85" height="35">
+        <% end %>
         <!-- The Auction Modal (입찰하기버튼 눌렀을 때)-->
         <div class = "modal" id = "<%= "Auction_open"+(x.id).to_s %>">
           <div class="modal-content">
