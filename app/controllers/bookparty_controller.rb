@@ -75,6 +75,7 @@ class BookpartyController < ApplicationController
           #view에서 뿌려주기 위해
           @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch})
       end
+      
   end
 	  
   def storebookinfo
@@ -90,12 +91,11 @@ class BookpartyController < ApplicationController
     sellbook.bookprice = params[:bookprice]
     sellbook.nowbookprice = params[:nowbookprice]
     sellbook.bookstate = params[:bookstate]
-    
     booksellterm_date = Date.strptime(params[:booksellterm_date],'%m/%d/%Y').strftime('%Y-%m-%d')
     booksellterm =  booksellterm_date + " " + params[:booksellterm_time] + ":00"
     #string -> 시간형태 -> 정수형으로 바꿔서 booksellterm으로 디비에 박기
     sellbook.booksellterm = DateTime.parse(booksellterm).to_i
-    
+    puts sellbook.booksellterm
     #hashtag 받아와서 처리 - hashtag ','로 split해서 tags배열에 저장
     list = params[:hashtag].split(",")
     #각 tag마다 Tags저장 + Sellbooks_Tag 디비에 저장
@@ -108,39 +108,38 @@ class BookpartyController < ApplicationController
     redirect_to '/bookparty/search'
   end
     
-  def auction_price_update
-    
+  def auction_price_update #입찰버튼을 눌렀을 때! (매물리스트보다 더 최신이지. 더 갱신된 디비 값이겠지)
     sellbook_update = Sellbook.find(params[:id])
-    sellbook_update.bookprice = params[:bookprice] #입찰가 받아오기 update
-    sellbook_update.save
-    
-    #auction참여 기록 남기기
-    #판매자가 입찰 참여 못하도록 하는 부분 추가 필요 
-    auction_update = Auction.where(user_id: session[:user_id], sellbook_id: params[:id]).take
-    if auction_update.nil?  #경매에 처음 참여한다면 
-      auction = Auction.new #새로 auction기록을 남기고 저장
-      auction.user_id = session[:user_id]
-      auction.sellbook_id = params[:id]
-      auction.auctionprice = params[:bookprice]
-      auction.save
-    else  #경매에 참여한 기록이 있다면
-      auction_update.auctionprice = params[:bookprice]  #가격만 업데이트해준다
-      auction_update.save
+    #db가격보다 낮으면 업데이트 안되게 수정
+    if params[:bookprice].to_i > sellbook_update.bookprice #두번째 case  - 입찰버튼을 눌렀을 그때의 디비값과 비교 
+      sellbook_update.bookprice = params[:bookprice] #입찰가 받아오기 update
+      sellbook_update.save
+      #auction참여 기록 남기기
+      #판매자가 입찰 참여 못하도록 하는 부분 추가 필요 
+      auction_update = Auction.where(user_id: session[:user_id], sellbook_id: params[:id]).take
+      if auction_update.nil?  #경매에 처음 참여한다면 
+        auction = Auction.new #새로 auction기록을 남기고 저장
+        auction.user_id = session[:user_id]
+        auction.sellbook_id = params[:id]
+        auction.auctionprice = params[:bookprice]
+        auction.save
+      else  #경매에 참여한 기록이 있다면
+        auction_update.auctionprice = params[:bookprice]  #가격만 업데이트해준다
+        auction_update.save
+      end
+      render :json => {"result" => "success", "sellbook" => sellbook_update}
     end
-
-    render :json => {"result" => "success", "sellbook" => sellbook_update}
   end
   
   def my_page
     @userid = session[:user_id]
     @username = User.find(@userid).username
     
-    #current-user가 판매할 책 - 남은시간의 "최신순"으로 정렬시킨다 
+    #current-user가 판매할 책 - 남은시간의 "최신순"으로 정렬시킨다
     @sellbook = Sellbook.where(user_id: @userid).order('booksellterm ASC')
     
     #current-user가 참여한 경매 리스트
     @auction = Auction.where(user_id: @userid)
-    
     @close = Array.new
   end
 end
