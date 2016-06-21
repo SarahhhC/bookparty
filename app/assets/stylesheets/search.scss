@@ -3,16 +3,6 @@ body {
     background-repeat:no-repeat;
     background-size:cover;
 }
-
-.top {
-    display:block;
-    font-size :30pt; 
-    color:black;
-    margin-top:300px; 
-    background-color:white ;  
-    text-align:center;
-}
-
 form{
     margin-top: 62px;
     margin-bottom: 80px;
@@ -24,6 +14,9 @@ form{
     font-size : 15pt;
     margin-right: -5px;
     border: none;
+}
+.c-form-search:focus{
+    outline: none;
 }
 .c-form-submit {
     height: 48px;
@@ -55,14 +48,18 @@ h2 {
     width: 100px;
     height: 60px;
 }
-
+#storebtn:focus{
+    outline: none;
+}
 #mypagebtn{
     float: left;
     margin-top: -30px;
     width: 100px;
     height: 60px;
 }
-
+#mypagebtn:focus{
+    outline: none;
+}
 .position{
     margin :auto;
 }

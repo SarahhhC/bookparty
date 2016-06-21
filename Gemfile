@@ -1,4 +1,7 @@
 source 'https://rubygems.org'
+gem 'rpush'
+#push signal
+gem 'mac-address'
 #timepicker
 gem 'clockpicker-rails'
 #datepicker
@@ -24,7 +27,7 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

@@ -28,12 +28,15 @@ ActiveRecord::Schema.define(version: 20160518100126) do
   create_table "sellbooks", force: :cascade do |t|
     t.string   "booktitle"
     t.string   "book_image"
+    t.string   "book_image2"
+    t.string   "book_image3"
     t.string   "bookauthor"
     t.string   "bookpublisher"
     t.integer  "bookprice"
     t.integer  "nowbookprice"
     t.integer  "bookstate"
     t.integer  "booksellterm"
+    t.string   "sellerip"
     t.integer  "user_id",       :foreign_key=>{:references=>"users", :name=>"fk_sellbooks_user_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__sellbooks_user_id"}
     t.datetime "created_at",    :null=>false
     t.datetime "updated_at",    :null=>false

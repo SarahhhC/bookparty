@@ -4,12 +4,13 @@
 </head>
 <body>
     <b class="top">
-        <form method="post" action="/bookparty/login_complete">
-            Email : <input type="text" name="usermail"><br>
-            Password : <input type="password" name="userpw"><br>
-            <input type="submit" value="login">
-            <a href="/bookparty/signup">signup...</a>
-            <a href="/bookparty/search">둘러보기...</a>
+        <form method="post" action="/bookparty/login_complete" class="loginform">
+            <h1>Log in</h1>
+            <center><input type="text" id="input_email" name="usermail" placeholder="Email"><br>
+            <input type="password" id="pw" name="userpw" placeholder="Password"><br>
+            <input type="submit" value="login" id="login_btn">
+            <h5>아직 가입하지 않으셨나요?</h5><a href="/bookparty/signup"><h5>Sign Up</h5></a>
+            </center>
         </form>
     </b>
 </body>

@@ -6,14 +6,7 @@
   float: right;
   width: 50%;
 }
-.top {
-    display:block;
-    font-size :13pt;
-    font-family:"Arial";
-    color:black;
-    margin-top:200px ;
-    background-color:white ;
-}
+
 .hashtag-parent {
     display: inline-block;
 }
@@ -27,12 +20,10 @@
 input[type='file'] {
   border: 1px solid #d1d1d1;
   padding: .5em;
-  border-radius: .3em;
 }
 
 input[type='text'] {
   border: 1px solid #d1d1d1;
-  border-radius: .3em;
 }
 /*!
  * Datetimepicker for Bootstrap 3

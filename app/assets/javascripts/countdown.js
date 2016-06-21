@@ -137,8 +137,8 @@
 			@property [isRTL=false] {boolean} True for right-to-left languages, false for left-to-right. */
 		regionalOptions: { // Available regional settings, indexed by language/country code
 			'': { // Default regional settings - English/US
-				labels: ['Years', 'Months', 'Weeks', '일', '시간', '분', '초'],
-				labels1: ['Year', 'Month', 'Week', '일', '시간', '분', '초'],
+				labels: ['년', '달', '주', '일', '시간', '분', '초'],
+				labels1: ['년', '달', '주', '일', '시간', '분', '초'],
 				compactLabels: ['y', 'm', 'w', 'd'],
 				whichLabels: null,
 				digits: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
@@ -883,4 +883,3 @@
 	});
 
 })(jQuery);
-

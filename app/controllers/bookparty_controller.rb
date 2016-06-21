@@ -75,7 +75,6 @@ class BookpartyController < ApplicationController
           #view에서 뿌려주기 위해
           @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch})
       end
-      
   end
 	  
   def storebookinfo
@@ -85,14 +84,19 @@ class BookpartyController < ApplicationController
     sellbook = Sellbook.new
     sellbook.user_id = params[:user_id]
     sellbook.booktitle = params[:booktitle]
-    sellbook.book_image = params[:image_file]
+    
+    sellbook.book_image = params[:image_file] #표지
+    sellbook.book_image2 = params[:image_file2] #뒷면
+    sellbook.book_image3 = params[:image_file3] #임의 
+    
     sellbook.bookauthor = params[:bookauthor]
     sellbook.bookpublisher = params[:bookpublisher]
     sellbook.bookprice = params[:bookprice]
     sellbook.nowbookprice = params[:nowbookprice]
     sellbook.bookstate = params[:bookstate]
+    sellbook.sellerip = params[:sellerip]
     booksellterm_date = Date.strptime(params[:booksellterm_date],'%m/%d/%Y').strftime('%Y-%m-%d')
-    booksellterm =  booksellterm_date + " " + params[:booksellterm_time] + ":00"
+    booksellterm =  booksellterm_date + " " + params[:booksellterm_time] + ":00+0900"
     #string -> 시간형태 -> 정수형으로 바꿔서 booksellterm으로 디비에 박기
     sellbook.booksellterm = DateTime.parse(booksellterm).to_i
     puts sellbook.booksellterm
@@ -141,5 +145,13 @@ class BookpartyController < ApplicationController
     #current-user가 참여한 경매 리스트
     @auction = Auction.where(user_id: @userid)
     @close = Array.new
+    @close_buy = Array.new
   end
+  
+  def show_mac_address
+    puts @mymacaddress
+   
+    @client_ip = request.ip
+    @mac_address = get_mac_address(@client_ip)
+  end 
 end

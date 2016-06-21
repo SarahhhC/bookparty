@@ -1,34 +1,18 @@
 <head>
   <meta charset="UTF-8">
   <title>판매</title>
-  <link rel="stylesheet" type="text/css" href="/assets/stylesheet/jquery.tagsinput.css" />
-  <script type="text/javascript" src="/assets/javascript/jquery.tagsinput.js"></script>
-  <script src="/javascript/jquery.min.js"></script>
-  <script type="text/javascript">
-    function onAddTag(tag) {
-      alert("Added a tag: " + tag);
-    }
-    
-    function onRemoveTag(tag) {
-      alert("Removed a tag: " + tag);
-    }
-      
-    function onChangeTag(input,tag) {
-      alert("Changed a tag: " + tag);
-    }
-      
-    $(function() {
-      $('#tags_1').tagsInput();
-    });
-  </script>
 </head>
-
 <body>
   <b class="top">
     <form method="post" action="/bookparty/storebookinfo_complete" enctype="multipart/form-data">
       <input type = "hidden" name = "user_id" value = "<%= session["user_id"] %>" >
+      <input type = "hidden" name = "sellerip" value = "<%= request.remote_ip %>" > 
         책 제목 : <input type = "text" name = "booktitle"><br><br>
-        책 사진 : <input type = "file" name = "image_file"> <br><br>
+        책 사진  
+        표지 : <input type = "file" name = "image_file"> <br><br>
+        맨 뒷면 : <input type = "file" name = "image_file2"> <br><br> 
+        임의의 페이지 : <input type = "file" name = "image_file3"> <br><br> 
+        
         저자 : <input type = "text" name = "bookauthor"><br><br>
         출판사 : <input type = "text" name = "bookpublisher"><br><br>
         시작가 : <input type = "text" name = "bookprice"><br><br>
@@ -47,13 +31,17 @@
         <br><br>
     </form>
   </b>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.datepicker').datepicker({orientation: "top right", autoclose: true});
+      
+      $('#clock').clockpicker({
+        autoclose: true
+      });
+    });
+    
+    $(function() {
+        $('#tags_1').tagsInput();
+    });
+  </script>
 </body>
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
-  });
-  $('#clock').clockpicker({
-      autoclose: true
-  });
-</script>

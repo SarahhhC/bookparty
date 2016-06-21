@@ -1,6 +1,5 @@
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="/assets/stylesheet/search.css" />
   <!--script type="text/javascript" src="/javascript/jquery.fullpage.js"></script>
   <script type="text/javascript">
   	$(document).ready(function() {
@@ -13,7 +12,6 @@
     });
 </script-->
 </head>
-    
 <body>
   <!-- div id="fullpage" -->
     <!-- div class="section" id="section0"-->
@@ -31,7 +29,7 @@
       <% end %>
       <center> <!-- 검색바 - parameter를 tagresult로 날려준다 -->
         <form action="/bookparty/tagresult" method="POST">
-            <input type="text" class="c-form-search" name ="tagSearch" placeholder=" 책제목 , 학교이름을 입력하세요." required />
+            <input type="text" class="c-form-search" name ="tagSearch" placeholder=" 해시태그를 입력하세요." required />
             <input type="image" class = "c-form-submit" src="/images/search.png" alt="Submit" width="48" height="48">
         </form>
       </center>
