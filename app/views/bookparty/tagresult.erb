@@ -68,11 +68,7 @@
             
           $('#' + "startAuction" + id).click(function() {
             //case -> "동일한 ip인사람이 책 입찰하려할때!" (다른 계정으로 책 등록하고 입찰 참여할경우)
-            if (<%= request.remote_ip.gsub(".","") %> == <%= x.sellerip.gsub(".","") %>) {
-              alert("너가 등록해 놓고 왜 너가 가격올림?ㅋㅋㅋㅋ\n 방금 ip <%= request.remote_ip %> = 판매자 ip <%= x.sellerip %>");
-            } 
-            else
-              $('#' + "Auction_open" + id).show();
+            $('#' + "Auction_open" + id).show();
           });
           
           $('#' + "joinAuction" + id).click(function() {

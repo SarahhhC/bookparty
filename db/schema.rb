@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518100126) do
+ActiveRecord::Schema.define(version: 20160621134339) do
 
   PRAGMA FOREIGN_KEYS = ON;
   create_table "users", force: :cascade do |t|
@@ -43,8 +43,18 @@ ActiveRecord::Schema.define(version: 20160518100126) do
     t.integer  "user_id",      :foreign_key=>{:references=>"users", :name=>"fk_auctions_user_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__auctions_user_id"}
     t.integer  "sellbook_id",  :foreign_key=>{:references=>"sellbooks", :name=>"fk_auctions_sellbook_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__auctions_sellbook_id"}
     t.integer  "auctionprice"
+    t.integer  "finished"
     t.datetime "created_at",   :null=>false
     t.datetime "updated_at",   :null=>false
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer  "user_id",         :foreign_key=>{:references=>"users", :name=>"fk_notifications_user_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__notifications_user_id"}
+    t.integer  "sellbook_id",     :foreign_key=>{:references=>"sellbooks", :name=>"fk_notifications_sellbook_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__notifications_sellbook_id"}
+    t.integer  "seller_or_buyer"
+    t.integer  "checked"
+    t.datetime "created_at",      :null=>false
+    t.datetime "updated_at",      :null=>false
   end
 
   create_table "tags", force: :cascade do |t|

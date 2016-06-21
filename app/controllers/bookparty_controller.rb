@@ -1,4 +1,5 @@
 class BookpartyController < ApplicationController
+
   def signup
   end
     
@@ -126,6 +127,7 @@ class BookpartyController < ApplicationController
         auction.user_id = session[:user_id]
         auction.sellbook_id = params[:id]
         auction.auctionprice = params[:bookprice]
+        auction.finished = 0
         auction.save
       else  #경매에 참여한 기록이 있다면
         auction_update.auctionprice = params[:bookprice]  #가격만 업데이트해준다

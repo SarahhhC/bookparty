@@ -22,3 +22,37 @@
 body {
     -webkit-font-smoothing: antialiased !important;
 }
+#storebtn{
+    float: left;
+    margin-top: 10px;
+    width: 100px;
+    height: 60px;
+}
+#storebtn:focus{
+    outline: none;
+}
+#mypagebtn{
+    float: left;
+    margin-top: 10px;
+    width: 100px;
+    height: 60px;
+}
+#mypagebtn:focus{
+    outline: none;
+}
+.count{
+    margin-top: 0pt;
+    margin-left: -10pt;
+    border: solid 0px;
+    border-radius: 30px;
+    background: rgb(35,152,136);
+    color: white;
+    font-size: 100%;
+    width: 30px;
+    height: 30px;
+}
+.box{
+    display: none;
+    width: 120px;
+    height: 60px;
+}

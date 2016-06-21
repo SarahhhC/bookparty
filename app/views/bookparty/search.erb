@@ -18,10 +18,6 @@
       <% unless @userid.nil? %>
         <a class="users" href="/bookparty/logout" style="text-decoration:none; font-size: 15px" >Logout</a><br>
         <p class="users"><%= @username %>님 환영합니다.</p><br>
-        <a href="/bookparty/storebookinfo"><input type = "image" id="storebtn" src="/images/storebookinfo.png"></a>
-        <a class = "my_page" href="/bookparty/my_page">
-          <input type = "image" id="mypagebtn" src="/images/mypage.png" style="margin-left: 15px;">
-        </a>
         <p class="title">책파리 피플</p><br>
         <h2>모두가 합리적인 중고책거래를 할 수 있습니다!<br>지금부터 시작해 보세요.</h2>
       <% else %>
