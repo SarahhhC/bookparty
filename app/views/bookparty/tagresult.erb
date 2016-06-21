@@ -16,9 +16,49 @@
     <!-- 해당 태그가 존재 할 때 -->
   <% if @sellbook %>
     <div class="showYes">
-        <h2> <%=@showyes %> 에 대한 검색결과입니다.  </h2>
+        <h2> #<%=@showyes %> 에 대한 검색결과입니다.  </h2>
     </div>
     <% @sellbook %>
+    <% @sellbook.each do |x| %>
+      <!-- The Auction Modal (입찰하기버튼 눌렀을 때)-->
+      <div class = "modal" id = "<%= "Auction_open"+(x.id).to_s %>">
+        <div class="modal-content">
+            <span class="close" > x </span>
+            <table>
+              <tr>
+                <td>
+                  <p> <%= x.booktitle %> </p>
+                  <img src="<%= x.book_image.url %>" width="100px" height="200px"> <br>
+                  <p> <b>현재가격  : <%= x.bookprice %> 원 </b> </p>
+                  <p> 즉구가격  : <%= x.nowbookprice %> 원 </p>
+                  <p> 입찰가격 : <input type = "text" class = "<%= "auction-update"+(x.id).to_s %>" name = "bookprice"> 원 </p> <br><br> 
+                  <input type="image" id = "<%= "joinAuction"+(x.id).to_s %>" data-id = "<%= x.id %>" src="/images/actionbtn.png" width="85" height="35">
+                </td>
+                <td>
+                  <h3>입찰 현황</h3>
+                  <!-- 사람들이 얼마에 입찰하고 있는지 auction log 찍자 -->
+                  <% @showAuctionHistory = Auction.where(sellbook_id: x) %>
+                  <% @showAuctionHistory.order('auctionprice DESC').each do |a| %>
+                    <%= a.user_id %> 님이 <%= a.auctionprice %>원에 <%= a.created_at %>에 입찰하셨습니다. <br>
+                  <% end %>
+                </td>
+                </tr>
+            </table>
+        </div>
+      </div>
+      <!-- The ExactBuy Modal (즉구버튼 눌렀을 때)-->
+      <div class = "modal" id = "<%= "ExactBuy_open"+(x.id).to_s %>">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close" >x</span>
+          <p><%= x.booktitle %></p>
+          <p>현재가격  : <%= x.bookprice %> 원 </p>
+          <p><b>즉구가격  : <%= x.nowbookprice %> 원 </b></p>
+        </div>
+      </div>  
+      <% end %> 
+      
+          <div class = "wrapper">
     <% @sellbook.each do |x| %>
       <!-- now는 현재시간 endtime은 종료시간 deadline은 반복문이 도는 기간 -->
       <%  Time.zone = 'Seoul'
@@ -27,17 +67,22 @@
       <%  if deadline <= 0 %> <!-- deadline끝나면 경매 종료 -->
           <b><p id = <%= 'endstate'+(x.id).to_s %>>종료된 매물입니다. </p></b>
       <%  end %>
-      <p>
-        <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
-        <% sellboook_tag.each do |t| %>
-            <% taglist = Tag.find(t.tag_id) %>
-            #<%= taglist.tagname %>
-        <% end %>
-      </p> <br>
-        <%= x.id %>
+        <div class="card">
+          <div class="card-image waves-effect waves-block waves-light">
+            <img class="activator" style="width:400px; height:300px;"src="<%= x.book_image.url %>">
+          </div>
+          <div class="card-content">
+            <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+            <p><a href="#">            <p><% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
+               <% sellboook_tag.each do |t| %>
+                  <% taglist = Tag.find(t.tag_id) %>
+                  #<%= taglist.tagname %>
+              <% end %></p> <br>
+</a></p>
+          </div>
+          <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
       <p>책 제목 : <%= x.booktitle %> </p> <br>
-      <p>책 사진 : </p>
-          <img src="<%= x.book_image.url %>" width="100px" height="200px"> <br>
       <p>책 저자 :<%= x.bookauthor %> </p> <br>
       <p>책 출판사 <%= x.bookpublisher %> </p> <br>
       <p>책 가격 : <%= x.bookprice %> 원 </p> <br>
@@ -75,7 +120,7 @@
             //입찰가를 누르는순간 그때 읽어야한다
             if (<%= x.bookprice %> <= bookprice) { //첫번쨰 case - (검색했을 당시의) 디비에 등록되어있는 현재가보다 작을때
               $.ajax({
-                type: "POST",		//요청방식
+                type: "POST",	//요청방식
                 url: "/bookparty/auction_price_update",	//요청URL
                 data: {
                   id: id,
@@ -116,43 +161,10 @@
         <input type="image" id = "<%= "startAuction"+(x.id).to_s %>" src="/images/actionbtn.png" width="85" height="35">
         <input type="image" id = "<%= "startExactBuy"+(x.id).to_s %>" src="/images/sellbuynow.png" width="85" height="35">
       <% end %>
-      <!-- The Auction Modal (입찰하기버튼 눌렀을 때)-->
-      <div class = "modal" id = "<%= "Auction_open"+(x.id).to_s %>">
-        <div class="modal-content">
-            <span class="close" > x </span>
-            <table>
-              <tr>
-                <td>
-                  <p> <%= x.booktitle %> </p>
-                  <img src="<%= x.book_image.url %>" width="100px" height="200px"> <br>
-                  <p> <b>현재가격  : <%= x.bookprice %> 원 </b> </p>
-                  <p> 즉구가격  : <%= x.nowbookprice %> 원 </p>
-                  <p> 입찰가격 : <input type = "text" class = "<%= "auction-update"+(x.id).to_s %>" name = "bookprice"> 원 </p> <br><br> 
-                  <input type="image" id = "<%= "joinAuction"+(x.id).to_s %>" data-id = "<%= x.id %>" src="/images/actionbtn.png" width="85" height="35">
-                </td>
-                <td>
-                  <h3>입찰 현황</h3>
-                  <!-- 사람들이 얼마에 입찰하고 있는지 auction log 찍자 -->
-                  <% @showAuctionHistory = Auction.where(sellbook_id: x) %>
-                  <% @showAuctionHistory.order('auctionprice DESC').each do |a| %>
-                    <%= a.user_id %> 님이 <%= a.auctionprice %>원에 <%= a.created_at %>에 입찰하셨습니다. <br>
-                  <% end %>
-                </td>
-                </tr>
-            </table>
+          </div>
         </div>
-      </div>
-      <!-- The ExactBuy Modal (즉구버튼 눌렀을 때)-->
-      <div class = "modal" id = "<%= "ExactBuy_open"+(x.id).to_s %>">
-        <!-- Modal content -->
-        <div class="modal-content">
-          <span class="close" >x</span>
-          <p><%= x.booktitle %></p>
-          <p>현재가격  : <%= x.bookprice %> 원 </p>
-          <p><b>즉구가격  : <%= x.nowbookprice %> 원 </b></p>
-        </div>
-      </div>
-      <hr>
+        
     <% end %> <!-- sellbook loop end -->
+    </div>
   <% end %>  <!-- if end -->
 </body>

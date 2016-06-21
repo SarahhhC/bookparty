@@ -34,22 +34,33 @@
     });
   </script>
 </head>
-<body class="w3-container">
-  <center><h1>My Page</h1></center>
-
-
-
+<body>
+    <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo">Logo</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="sass.html">Sass</a></li>
+          <li><a href="badges.html">Components</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div>
+  <center><p id="mypagetitle">My Page</p></center>
+  <a href="/bookparty/search" ><img src="/images/home.png" width="30px" height="30px" /></a>
   <div class = "current-user"  style="display: inline-block; float: right">
     <div class = "userface" style = "display: inline-block" > <img width="30px" height="30px" src="/images/current-user.png" alt="current-user"> </div>
-    <div class ="username" style="display: inline-block; font-size: 30px"> <%= @username %> 님 </div>
+    <div class ="username" style="display: inline-block; font-size: 20px; color: white;"> <%= @username %> 님 </div>
+  </div>
   </div>
   <br><br>
   <div class="tabmenu">
     <ul>
-      <li><a href="#link"><img src="/images/selltab.png" alt="판매할 책" /></a>
+      <li><a href="#link"><input type="button" id="sellbookbtn" value="판매할 책" /></a>
         <ul class="tabcontent">
           <% @sellbook %>
-          <div class = "sell-book-list" >
+          <div class = "wrapper" >
             <% @sellbook.each do |x| %>
               <%  Time.zone = 'Seoul'
                   now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
@@ -62,45 +73,15 @@
               <%  if deadline <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
                     @close << x %>
               <%  else %>
-                <div class="w3-card-4" style="width:70%">
-                  
-                  <header class="w3-container w3-light-grey">
-                    <h3>John Doe</h3>
-                  </header>
-                  
-                  <div class="w3-container">
-                    <p>1 new friend request</p>
-                    <hr>
-                    <img src="<%= x.book_image.url %>" alt="책사진" class="w3-left w3-circle w3-margin-right" style="width:60px">
-                     <div class="caption" style="/* display: inline-block; */margin-top: -300px;margin-left: 200px;">
-                        <h4><%= x.booktitle %></h4>
-                        <p><div id = "<%= "endtime"+(x.id).to_s %>"></div></p>
-                        <p> 관련 태그 
-                          <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
-                          <% sellboook_tag.each do |t| %>
-                            <% taglist = Tag.find(t.tag_id) %>
-                            #<%= taglist.tagname %>
-                          <% end %> 
-                        </p>
-                        <p id="writer"> 저자  <%= x.bookauthor %>  </p>
-                        <p> 현재가격  <%= x.bookprice %> 원 </p>
-                        <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
-                        <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
-                      </div>
+                <div class="card">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" src="<%= x.book_image.url %>">
                   </div>
-                  
-                  <button class="w3-btn-block w3-dark-grey">+ Connect</button>
-                  
-                </div>
-              
-                <div class="row">
-                  <div class="col-sm-6" style="">
-                    <div class="thumbnail" style="margin-left: 20px; width: 500px; height: 300px;">
-                      <div class="thumbnail-image" style="width: 150px; height: 300px; margin-bottom: 20px; padding-top: 50px;">
-                        <img src="<%= x.book_image.url %>" width="100px" height="200px" alt="책사진">
-                      </div>
-                      <div class="caption" style="/* display: inline-block; */margin-top: -300px;margin-left: 200px;">
-                        <h4><%= x.booktitle %></h4>
+                  <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
                         <p><div id = "<%= "endtime"+(x.id).to_s %>"></div></p>
                         <p> 관련 태그 
                           <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
@@ -113,22 +94,24 @@
                         <p> 현재가격  <%= x.bookprice %> 원 </p>
                         <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
                         <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               <% end %>
             <% end %>
             
             <% @close.each do |x| %> <!-- 종료된거 뿌려줌  -->
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="thumbnail">
-                    <div class="thumbnail-image">
-                      <img src="<%= x.book_image.url %>" width="100px" height="200px" alt="책사진">
-                    </div>
-                    <div class="caption">
-                      <h5>이건 종료된 것입니다</h5>
+            
+                <div class="card">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" src="<%= x.book_image.url %>">
+                  </div>
+                  <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+                    <p><a href="#"><%= x.booktitle %></a></p>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
+                                            <h5>이건 종료된 것입니다</h5>
                       <% auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice).take
                           if auction.nil? %>
                             <h5>아무도 안삼...</h5>
@@ -148,15 +131,13 @@
                       <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
                       <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
                     </div>
-                  </div>
                 </div>
-              </div>
             <% end %>
           </div>
         </ul>
       </li>
         
-      <li><a href="#link"><img src="/images/buytab.png" alt="구매할 책" /></a>
+      <li><a href="#link"><input type="button" id="buybookbtn" value="구매할 책" /></a>
         <ul class="tabcontent">
             <% @auction.each do |a| %>  <!-- 최근 업데이트 한 순으로 재배열 필요 -->
               <% @auction_book = Sellbook.where(id: a.sellbook_id).order('booksellterm ASC') %> <!--  #auction의 sellbook_id와 같은 책정보수집  --> 
@@ -173,51 +154,53 @@
                   <%  if deadline_buy <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
                         @close_buy << x %>
                   <%  else %>
-                    <div class="row">
-                      <div class="col-sm-6" style="">
-                        <div class="thumbnail">
-                          <div class="thumbnail-image">
-                            <img src="<%= x.book_image.url %>" width="100px" height="200px" alt="책사진">
-                          </div>
-                          <div class="caption">
-                            <h4><%= x.booktitle %></h4>
-                            <p><div id = "<%= "endtime_buy"+(x.id).to_s %>"></div></p>
-                            <p> 관련 태그 
-                              <% sellboook_tag = SellbooksTag.where(sellbook_id: x.id) %> 
-                              <% sellboook_tag.each do |t| %>
-                                <% taglist = Tag.find(t.tag_id) %>
-                                #<%= taglist.tagname %>
-                              <% end %> 
-                            </p>
-                            <p> 저자  <%= x.bookauthor %>  </p>
-                            <p> 현재가격  <%= x.bookprice %> 원 </p>
-                            <p> 즉구가격  <%= x.nowbookprice %> 원 </p>
-                            <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <div class="card">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" src="<%= x.book_image.url %>">
+                  </div>
+                  <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
+                        <p><div id = "<%= "endtime"+(x.id).to_s %>"></div></p>
+                        <p> 관련 태그 
+                          <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
+                          <% sellboook_tag.each do |t| %>
+                            <% taglist = Tag.find(t.tag_id) %>
+                            #<%= taglist.tagname %>
+                          <% end %> 
+                        </p>
+                        <p> 저자  <%= x.bookauthor %>  </p>
+                        <p> 현재가격  <%= x.bookprice %> 원 </p>
+                        <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
+                        <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
+                  </div>
+                </div>
                   <% end %>
                 <% end %>
             <% end %>
             
             <% @close_buy.each do |x| %> <!-- 종료된거 뿌려줌  -->
-              <div class="row">
-                <div class="col-sm-6" style="">
-                  <div class="thumbnail">
-                    <div class="thumbnail-image">
-                      <img src="<%= x.book_image.url %>" width="100px" height="200px" alt="책사진">
-                    </div>
-                    <div class="caption">
-                      <h5>경매가 종료되었습니다</h5>
-                      <% success = Auction.where(sellbook_id: x.id, user_id: @userid, auctionprice: x.bookprice).take
-                          if success.nil? %>
-                            <h5>경매실패...뺏겼습니다</h5>
+        
+                <div class="card">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" src="<%= x.book_image.url %>">
+                  </div>
+                  <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+                    <p><a href="#"><%= x.booktitle %></a></p>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
+                                            <h5>이건 종료된 것입니다</h5>
+                      <% auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice).take
+                          if auction.nil? %>
+                            <h5>아무도 안삼...</h5>
                       <%  else  %>
-                            <h5><%= success.auctionprice %>원에 구매성공! </h5>
+                            <h5><%= auction.user_id %>님이 <%= auction.auctionprice %>원에 구매하셨음! 거래성공 </h5>
                       <%  end  %>
-                      <h4><%= x.booktitle %></h4>
-                      <p></p>
+                      <h5><%= x.booktitle %></h5>
                       <p> 관련 태그 
                         <% sellboook_tag = SellbooksTag.where(sellbook_id: x.id) %> 
                         <% sellboook_tag.each do |t| %>
@@ -227,12 +210,10 @@
                       </p>
                       <p> 저자  <%= x.bookauthor %>  </p>
                       <p> 현재가격  <%= x.bookprice %> 원 </p>
-                      <p> 즉구가격  <%= x.nowbookprice %> 원 </p>
+                      <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
                       <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
                     </div>
-                  </div>
                 </div>
-              </div>
             <% end %>
             
             </div>

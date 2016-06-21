@@ -1,18 +1,11 @@
-body {
-    background-image: url('/images/bg.png');
-    background-repeat:no-repeat;
-    background-size:cover;
-}
+
 form{
-    margin-top: 62px;
-    margin-bottom: 80px;
 }
 .c-form-search {
     margin-right:auto; margin-left:auto;
     width : 350px;
     height : 45px;
     font-size : 15pt;
-    margin-right: -5px;
     border: none;
 }
 .c-form-search:focus{
@@ -23,7 +16,6 @@ form{
     width: 48px;
     background-color: #011940;
     border: none;
-    margin-bottom: -16px;
 }
 .title {
     font-size: 64pt;

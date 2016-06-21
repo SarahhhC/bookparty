@@ -3,14 +3,26 @@
     <title>test1</title>
 </head>
 <body>
-    <b class="top">
-        <form method="post" action="/bookparty/login_complete" class="loginform">
-            <h1>Log in</h1>
-            <center><input type="text" id="input_email" name="usermail" placeholder="Email"><br>
-            <input type="password" id="pw" name="userpw" placeholder="Password"><br>
-            <input type="submit" value="login" id="login_btn">
-            <h5>아직 가입하지 않으셨나요?</h5><a href="/bookparty/signup"><h5>Sign Up</h5></a>
-            </center>
-        </form>
-    </b>
+ <div class="row" style="background: white; width: 450px; height: 400px">
+    <form class="col s12" method="post" action="/bookparty/login_complete" >
+      <h1 style="color:rgb(35,152,136);">Log in</h1>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="email" type="email" name="usermail" class="validate">
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="password" type="password"  name="userpw"  class="validate">
+          <label for="password">Password</label>
+        </div>
+      </div>
+      <center>
+      <input type="submit" value="login" id="login_btn">
+      <p style="text-align:center;">아직 가입하지 않으셨나요?</p>
+      <a href="/bookparty/signup"><h7>Sign Up</h7></a>
+      </center>
+    </form>
+  </div>
 </body>

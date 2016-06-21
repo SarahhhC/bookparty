@@ -1,0 +1,128 @@
+body{
+  background:rgb(242,239,236);
+}
+.tabmenu {
+  position: relative;
+  width: 400px;
+  height: 200px;
+  line-height: 17px; }
+
+.tabmenu img {
+  border: none;
+  vertical-align: top;
+  margin-left: 10px; }
+
+.tabmenu ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  margin-top: 15px; }
+
+.tabmenu ul li {
+  float: left; }
+
+.tabmenu .tabcontent {
+  display: none;
+  width: 240px;
+  height: 125px;
+  position: absolute;
+  left: 0px;
+  top: 60px; }
+
+.tabmenu .morebtn {
+  position: absolute;
+  right: 0;
+  top: 30px; }
+
+.thumbnail {
+  margin-left: 20px;
+  width: 500px;
+  height: 300px; }
+
+.thumbnail-image {
+  width: 150px;
+  height: 300px;
+  margin-bottom: 20px;
+  padding-top: 50px; }
+
+.caption {
+  margin-top: -300px;
+  margin-left: 200px; }
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 400px 400px 400px;
+  grid-gap: 10px;
+  color: #444;
+}
+
+.box {
+  background-color: #fff;
+  color: #444;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 100%;
+  width:500px;
+  height: 300px;
+}
+
+#sellbookbtn{
+  border: solid 1px white;
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+  font-size: 150%;
+  width: 150px;
+  height: 50px;
+  margin-right: 30px;
+}
+#sellbookbtn:active{
+  outline: none;
+  border: solid 1px white;
+  border-radius: 10px;
+  background: white;
+  color: black;
+  font-size: 150%;
+  width: 150px;
+  height: 50px;
+  margin-right: 30px;
+}
+#sellbookbtn:focus{
+  outline: none;
+}
+#buybookbtn{
+  border: solid 1px white;
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+  font-size: 150%;
+  width: 150px;
+  height: 50px;
+}
+#buybookbtn:active{
+  outline: none;
+  border: solid 1px white;
+  border-radius: 10px;
+  background: white;
+  color: black;
+  font-size: 150%;
+  width: 150px;
+  height: 50px;
+}
+#buybookbtn:focus{
+  outline: none;
+}
+#mypagetitle{
+  font-size: 60px;
+  color: white;
+
+}
+#header{
+  background-image: url('/images/bg.png');  
+}
+
+.card{
+  margin-left: 30px;
+  width: 400px;
+  height: 400px;
+}
