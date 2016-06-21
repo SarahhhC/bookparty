@@ -3,8 +3,6 @@ class CreateSellbooks < ActiveRecord::Migration
     create_table :sellbooks do |t|
       t.string :booktitle
       t.string :book_image
-      t.string :book_image2
-      t.string :book_image3
       t.string :bookauthor
       t.string :bookpublisher
       t.integer :bookprice

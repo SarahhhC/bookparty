@@ -20,7 +20,6 @@
 @import url(https://cdn.rawgit.com/theeluwin/NotoSansKR-Hestia/master/stylesheets/NotoSansKR-Hestia.css);
 
 body {
-    font-family: 'Exo 2', 'Noto-Sans', 'Apple SD Gothic Neo', NanumGothic, 'Malgun Gothic', "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased !important;
 }
 #storebtn{
