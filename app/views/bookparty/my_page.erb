@@ -133,6 +133,11 @@
                           if auction.nil? %>
                             <h5>아무도 안삼...</h5>
                       <%  else  %>
+                          <%  notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
+                              #unless notification.nil?
+                              #  notification.checked = 1
+                              #  notification.save
+                              #end %>
                             <h5><%= auction.user_id %>님이 <%= auction.auctionprice %>원에 구매하셨음! 거래성공 </h5>
                       <%  end  %>
                       <h5><%= x.booktitle %></h5>
@@ -214,6 +219,11 @@
                           if success.nil? %>
                             <h5>경매실패...뺏겼습니다</h5>
                       <%  else  %>
+                            <% notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
+                              #unless notification.nil?
+                              #  notification.checked = 1
+                              #  notification.save
+                              #end %>
                             <h5><%= success.auctionprice %>원에 구매성공! </h5>
                       <%  end  %>
                       <h4><%= x.booktitle %></h4>

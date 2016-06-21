@@ -7,13 +7,95 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>  
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+          
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'countdown' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+  <% unless session[:user_id].nil? %>
+    <a href="/bookparty/storebookinfo"><input type = "image" id="storebtn" src="/images/storebookinfo.png"></a>
+    <a class = "my_page" href="/bookparty/my_page">
+      <input type = "image" id="mypagebtn" src="/images/mypage.png" style="margin-left: 15px;">
+      <%
+        Time.zone = 'Seoul'
+        now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
+        sellbook = Sellbook.all
+        sellbook.each do |x|
+          deadline = x.booksellterm - now.to_i
+          if deadline <= 0
+            auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice).take
+            unless auction.nil?
+              if auction.finished == 0
+                notification = Notification.new 
+                notification.user_id = session[:user_id]
+                notification.sellbook_id = x.id
+                notification.seller_or_buyer = 1 #seller면 1
+                notification.checked = 2 #확인 안 했으면 2
+                notification.save
+                auction.finished = 1
+                auction.save
+              end
+            end
+            
+            success = Auction.where(sellbook_id: x.id, user_id: session[:user_id], auctionprice: x.bookprice).take
+            unless success.nil?
+              if success.finished == 0
+                notification = Notification.new 
+                notification.user_id = session[:user_id]
+                notification.sellbook_id = x.id
+                notification.seller_or_buyer = 2 #seller면 1
+                notification.checked = 2 #확인 안 했으면 2
+                notification.save
+                success.finished = 1
+                success.save
+              end
+            end
+          end
+        end
+      %>
+      <% 
+        count = Notification.where(user_id: session[:user_id], checked: 2).count
+        if count == 0 %>
+          <a class = "check" href="/bookparty/my_page">
+            <input type="button" class="count" value="<%= count %>" style="display:none;"/>
+          </a>
+      <%
+        else %>
+          <script>
+            $(function() {
+              $('.check').hover(function() {
+                $('.box').css('display', 'inline');
+              }
+            });
+          </script>
+            <a class = "check" href="/bookparty/my_page">
+              <input type="button" class="count" value="<%= count %>"/></a>
+            </a>
+            <% 1.upto(count) do |i| %>
+                <image class="box" src="/images/box.png" style="margin-right: 15px;">
+                <% 
+                  noti = Notification.where(user_id: session[:user_id], checked: 2)[i] 
+                    unless noti.nil?
+                      if noti.seller_or_buyer == 1 %>
+                        <p style="margin-top: <%= 50 + i*10 %>px; margin-right: 15px;">판매 성공!</p>
+                  <%  else %>
+                        <p style="margin-top: <%= 50 + i*10 %>px; margin-right: 15px;">구매 성공!</p>
+                  <%  end %>
+                <%  end %>
+            <% end %>
+      <%  
+        end
+      %>
+      
+    </a>
+  <% end %>
 <%= yield %>
 
 </body>
