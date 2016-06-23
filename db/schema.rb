@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621134339) do
+ActiveRecord::Schema.define(version: 20160621205459) do
 
   PRAGMA FOREIGN_KEYS = ON;
   create_table "users", force: :cascade do |t|
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20160621134339) do
 
   create_table "sellbooks", force: :cascade do |t|
     t.string   "booktitle"
+    t.string   "book_image"
     t.string   "bookauthor"
     t.string   "bookpublisher"
     t.integer  "bookprice"
@@ -46,6 +47,11 @@ ActiveRecord::Schema.define(version: 20160621134339) do
     t.integer  "finished"
     t.datetime "created_at",   :null=>false
     t.datetime "updated_at",   :null=>false
+  end
+
+  create_table "gmails", force: :cascade do |t|
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
   end
 
   create_table "notifications", force: :cascade do |t|

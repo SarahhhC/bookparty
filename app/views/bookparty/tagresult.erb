@@ -25,9 +25,6 @@
       <%  Time.zone = 'Seoul'
           now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
           deadline = x.booksellterm - now.to_i %>
-      <%  if deadline <= 0 %> <!-- deadline끝나면 경매 종료 -->
-          <b><p id = <%= 'endstate'+(x.id).to_s %>>종료된 매물입니다. </p></b>
-      <%  end %>
         <div class="card">
           <div class="card-image waves-effect waves-block waves-light">
             <img class="activator" style="width:400px; height:300px;"src="<%= x.book_image.url %>">
@@ -43,6 +40,9 @@
           </div>
           <div class="card-reveal">
             <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
+             <%  if deadline <= 0 %> <!-- deadline끝나면 경매 종료 -->
+          <b><p id = <%= 'endstate'+(x.id).to_s %>>종료된 매물입니다. </p></b>
+      <%  end %>
       <p>책 제목 : <%= x.booktitle %> </p> <br>
       <p>책 저자 :<%= x.bookauthor %> </p> <br>
       <p>책 출판사 <%= x.bookpublisher %> </p> <br>

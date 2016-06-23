@@ -3,7 +3,20 @@
   <title>판매</title>
 </head>
 <body>
-  <form method="post" action="/bookparty/storebookinfo_complete" enctype="multipart/form-data">
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
+    
+    $('#clock').clockpicker({
+      autoclose: true
+    });
+  });
+  
+  $(function() {
+      $('#tags_1').tagsInput();
+  });
+  </script>
+  <form method="post" action="/bookparty/storebookinfo_complete" enctype="multipart/form-data" >
     <input type = "hidden" name = "user_id" value = "<%= session["user_id"] %>" >
     <input type = "hidden" name = "sellerip" value = "<%= request.remote_ip %>" >
       <div class="input-field col s3" style ="width: 25%; margin-left : 500px">
@@ -52,10 +65,10 @@
         </div>
       </div>
       
-      <div style ="width: 25%;">
+      <div style ="width: 50%;">
         경매종료일  
-        <input type="text" placeholder="경매 종료 날짜를 선택하세요" class='datepicker' name = "booksellterm_date">
-        <input type="text" placeholder="경매 종로 시간을 선택하세요" id="clock" name = "booksellterm_time"><br><br>
+        <input type="text" placeholder="날짜를 선택하세요" class='datepicker' name = "booksellterm_date" style="width: 25%">
+        <input type="text" placeholder="시간을 선택하세요" id="clock" name = "booksellterm_time" style="width: 25%"><br><br>
         <div class = "hashtag-parent" >
           <div class="hashtag-nameing" > 해시태그  </div> 
           <div class="hashtag-input" >
@@ -70,17 +83,4 @@
   </form>
 </body>
 
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
-    
-    $('#clock').clockpicker({
-      autoclose: true
-    });
-  });
-  
-  $(function() {
-      $('#tags_1').tagsInput();
-  });
-</script>
  

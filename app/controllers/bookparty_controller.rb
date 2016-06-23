@@ -87,8 +87,8 @@ class BookpartyController < ApplicationController
     sellbook.booktitle = params[:booktitle]
     
     sellbook.book_image = params[:image_file] #표지
-    sellbook.book_image2 = params[:image_file2] #뒷면
-    sellbook.book_image3 = params[:image_file3] #임의 
+    #sellbook.book_image2 = params[:image_file2] #뒷면
+    #sellbook.book_image3 = params[:image_file3] #임의 
     
     sellbook.bookauthor = params[:bookauthor]
     sellbook.bookpublisher = params[:bookpublisher]
@@ -148,6 +148,19 @@ class BookpartyController < ApplicationController
     @auction = Auction.where(user_id: @userid)
     @close = Array.new
     @close_buy = Array.new
+  end
+  
+  def add_time_complete
+    sellbook = Sellbook.find(params[:sellbook_id])
+    booksellterm_date = Date.strptime(params[:booksellterm_date],'%m/%d/%Y').strftime('%Y-%m-%d')
+    booksellterm =  booksellterm_date + " " + params[:booksellterm_time] + ":00+0900"
+    #string -> 시간형태 -> 정수형으로 바꿔서 booksellterm으로 디비에 박기
+    sellbook.booksellterm = DateTime.parse(booksellterm).to_i
+    puts sellbook.booksellterm
+    #hashtag 받아와서 처리 - hashtag ','로 split해서 tags배열에 저장
+    
+    sellbook.save
+    redirect_to '/bookparty/my_page'
   end
   
   def show_mac_address

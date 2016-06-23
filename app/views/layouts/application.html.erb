@@ -27,70 +27,51 @@
         sellbook.each do |x|
           deadline = x.booksellterm - now.to_i
           if deadline <= 0
-            auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice).take
+            auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice, finished: 0).take
             unless auction.nil?
-              if auction.finished == 0
-                notification = Notification.new 
-                notification.user_id = session[:user_id]
-                notification.sellbook_id = x.id
-                notification.seller_or_buyer = 1 #seller면 1
-                notification.checked = 2 #확인 안 했으면 2
-                notification.save
-                auction.finished = 1
-                auction.save
-              end
+              notification = Notification.new 
+              notification.user_id = x.user_id
+              notification.sellbook_id = x.id
+              notification.seller_or_buyer = 1 #seller면 1
+              notification.checked = 2 #확인 안 했으면 2
+              notification.save
+              auction.finished = 1
+              auction.save
             end
             
-            success = Auction.where(sellbook_id: x.id, user_id: session[:user_id], auctionprice: x.bookprice).take
+            success = Auction.where(sellbook_id: x.id, user_id: session[:user_id], auctionprice: x.bookprice, finished: 1).take
             unless success.nil?
-              if success.finished == 0
-                notification = Notification.new 
-                notification.user_id = session[:user_id]
-                notification.sellbook_id = x.id
-                notification.seller_or_buyer = 2 #seller면 1
-                notification.checked = 2 #확인 안 했으면 2
-                notification.save
-                success.finished = 1
-                success.save
-              end
+              notification = Notification.new 
+              notification.user_id = session[:user_id]
+              notification.sellbook_id = x.id
+              notification.seller_or_buyer = 2 #seller면 1
+              notification.checked = 2 #확인 안 했으면 2
+              notification.save
+              success.finished = 2
+              success.save
             end
           end
         end
       %>
-      <% 
-        count = Notification.where(user_id: session[:user_id], checked: 2).count
-        if count == 0 %>
-          <a class = "check" href="/bookparty/my_page">
-            <input type="button" class="count" value="<%= count %>" style="display:none;"/>
-          </a>
-      <%
-        else %>
-          <script>
-            $(function() {
-              $('.check').hover(function() {
-                $('.box').css('display', 'inline');
-              }
-            });
-          </script>
-            <a class = "check" href="/bookparty/my_page">
-              <input type="button" class="count" value="<%= count %>"/></a>
-            </a>
-            <% 1.upto(count) do |i| %>
-                <image class="box" src="/images/box.png" style="margin-right: 15px;">
-                <% 
-                  noti = Notification.where(user_id: session[:user_id], checked: 2)[i] 
-                    unless noti.nil?
-                      if noti.seller_or_buyer == 1 %>
-                        <p style="margin-top: <%= 50 + i*10 %>px; margin-right: 15px;">판매 성공!</p>
-                  <%  else %>
-                        <p style="margin-top: <%= 50 + i*10 %>px; margin-right: 15px;">구매 성공!</p>
-                  <%  end %>
-                <%  end %>
-            <% end %>
-      <%  
-        end
-      %>
-      
+      <% unless session[:user_id].nil?
+          count = Notification.where(user_id: session[:user_id], checked: 2).count
+          unless count == 0 
+               sold = Notification.where(user_id: session[:user_id], checked: 2, seller_or_buyer: 1)
+               soldcount = sold.count
+               buyed = Notification.where(user_id: session[:user_id], checked: 2, seller_or_buyer: 2)
+               buyedcount = buyed.count %>
+            <ul id="dropdown2" class="dropdown-content">
+              <% if soldcount != 0 %>
+              <% #여기물어보잣 판매구매탭으로 바로이동하는 법! %>
+                  <li><a href="/bookparty/my_page"><p style="font-size:10pt;">판매<span class="new badge"><%= soldcount %></span></p></a></li>
+              <% elsif buyedcount != 0 %>
+                  <li><a href="/bookparty/my_page"><p style="font-size:10pt;">구매<span class="new badge"><%= buyedcount %></span></p></a></li>
+              <% end %>
+            </ul>
+            <a class="btn dropdown-button" href="#!" data-activates="dropdown2" style="font-size:8pt; padding: 5px; height:30px; font-weight:900">Up<i class="mdi-navigation-arrow-drop-down center"></i></a>
+            
+        <% end %>
+      <% end %>
     </a>
   <% end %>
 <%= yield %>

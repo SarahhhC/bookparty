@@ -1,7 +1,4 @@
 source 'https://rubygems.org'
-gem 'pusher'
-gem 'rpush'
-#push signal
 gem 'mac-address'
 #timepicker
 gem 'clockpicker-rails'

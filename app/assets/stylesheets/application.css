@@ -20,6 +20,7 @@
 @import url(https://cdn.rawgit.com/theeluwin/NotoSansKR-Hestia/master/stylesheets/NotoSansKR-Hestia.css);
 
 body {
+       background-image: url('/images/bgg.png');
     -webkit-font-smoothing: antialiased !important;
 }
 #storebtn{
@@ -27,6 +28,7 @@ body {
     margin-top: 10px;
     width: 100px;
     height: 60px;
+    margin-left: 30px;
 }
 #storebtn:focus{
     outline: none;
