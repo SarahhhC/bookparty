@@ -29,6 +29,13 @@
     font-weight: bold;
 }
 
+.closed {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
 .close:hover,
 .close:focus {
     color: black;
@@ -36,3 +43,9 @@
     cursor: pointer;
 }
 
+.closed:hover,
+.closed:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

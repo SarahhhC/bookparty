@@ -17,6 +17,7 @@
 </head>
 <body>
   <% unless session[:user_id].nil? %>
+    <a class="users" href="/bookparty/search" style="text-decoration:none; font-size: 15px" >Home</a>
     <a href="/bookparty/storebookinfo"><input type = "image" id="storebtn" src="/images/storebookinfo.png"></a>
     <a class = "my_page" href="/bookparty/my_page">
       <input type = "image" id="mypagebtn" src="/images/mypage.png" style="margin-left: 15px;">

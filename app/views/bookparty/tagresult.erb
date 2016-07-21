@@ -25,42 +25,12 @@
       <%  Time.zone = 'Seoul'
           now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
           deadline = x.booksellterm - now.to_i %>
-        <div class="card">
-          <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" style="width:400px; height:300px;"src="<%= x.book_image.url %>">
-          </div>
-          <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-            <p><a href="#">
-              <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
-              <% sellboook_tag.each do |t| %>
-              <% taglist = Tag.find(t.tag_id) %>
-              #<%= taglist.tagname %>
-              <% end %></a></p>
-          </div>
-          <div class="card-reveal">
-            <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
-             <%  if deadline <= 0 %> <!-- deadline끝나면 경매 종료 -->
-          <b><p id = <%= 'endstate'+(x.id).to_s %>>종료된 매물입니다. </p></b>
-      <%  end %>
-      <p>책 제목 : <%= x.booktitle %> </p> <br>
-      <p>책 저자 :<%= x.bookauthor %> </p> <br>
-      <p>책 출판사 <%= x.bookpublisher %> </p> <br>
-      <p>책 가격 : <%= x.bookprice %> 원 </p> <br>
-          
-      <% if x.bookstate == 1 %>
-          <p>책 상태 : "상" </p> <br>
-      <% elsif x.bookstate == 2 %>
-          <p>책 상태 : "중" </p> <br>
-      <% elsif x.bookstate == 3 %>
-          <p>책 상태 : "하" </p> <br>
-      <% end %>
-
       <script>
         $(function () {
           var id = <%= x.id %>;
             
           $('#' + id).countdown({until: +<%= deadline %>});
+          $('#' + 'endtime' + id).countdown({until: +<%= deadline %>});
           
           $('#' + "startExactBuy" + id).click(function() {
             $('#' + "ExactBuy_open" + id).show();
@@ -110,7 +80,46 @@
           });
         });
       </script>
-      <!-- deadline countdown -->
+      
+      <div class="card">
+        <div class="card-image waves-effect waves-block waves-light">
+          <img class="activator" style="width:400px; height:300px;"src="<%= x.book_image.url %>">
+        </div>
+        <div class="card-content">
+          <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+          <%  if deadline <= 0 %> <!-- deadline끝나면 경매 종료 -->
+            <b><span id = <%= 'endstate'+(x.id).to_s %>>종료된 매물입니다. </span></b>
+          <%  else %>
+            <b><span id = "<%= "endtime"+(x.id).to_s %>"></span></b>
+          <%  end %>
+          <p>
+            <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
+            <% sellboook_tag.each do |t| %>
+              <% taglist = Tag.find(t.tag_id) %>
+              <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>
+                #<%= taglist.tagname %>
+              </a>
+            <% end %></p>
+        </div>
+        <div class="card-reveal">
+          <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
+          <% u = User.where(id: x.user_id).take
+             unless u.nil? %>
+            <p>판매자 <a href=<%= "/bookparty/seller_page?name="+ u.username %> name="name"><%= u.username %></a></p>
+          <% end %>
+          <p>책 제목 : <%= x.booktitle %> </p>
+          <p>책 저자 :<%= x.bookauthor %> </p>
+          <p>책 출판사 <%= x.bookpublisher %> </p>
+          <p>책 가격 : <%= x.bookprice %> 원 </p>
+            
+          <% if x.bookstate == 1 %>
+              <p>책 상태 : "상" </p> <br>
+          <% elsif x.bookstate == 2 %>
+              <p>책 상태 : "중" </p> <br>
+          <% elsif x.bookstate == 3 %>
+              <p>책 상태 : "하" </p> <br>
+          <% end %>
+        
       <p>경매 기간 : <div id = "<%= x.id %>"></div> </p> <br>
       <!-- 입찰하기, 즉구 버튼 Trigger/Open The Modal -->
       <!-- case- "같은 계정일 때" - 책 올린사람이 입찰 못하게! + 00:00:00 일때도 막아놓음 -->
@@ -154,8 +163,8 @@
           <p><b>즉구가격  : <%= x.nowbookprice %> 원 </b></p>
         </div>
       </div>                  
-          </div>
-        </div>
+      </div>
+    </div>
         
     <% end %> <!-- sellbook loop end -->
     </div>

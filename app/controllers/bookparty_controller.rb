@@ -150,6 +150,12 @@ class BookpartyController < ApplicationController
     @close_buy = Array.new
   end
   
+  def seller_page
+    @showno = "존재하지 않는 사용자입니다."
+    @name = params[:name]
+    @close = Array.new
+  end
+  
   def add_time_complete
     sellbook = Sellbook.find(params[:sellbook_id])
     booksellterm_date = Date.strptime(params[:booksellterm_date],'%m/%d/%Y').strftime('%Y-%m-%d')
