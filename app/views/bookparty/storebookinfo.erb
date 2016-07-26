@@ -4,18 +4,6 @@
 </head>
 <body>
   <script type="text/javascript">
-  $(document).ready(function(){
-    $('#isbnButton').click(function() {
-      obj.init();
-      obj.pingSearch();
-    });
-    
-    $('#clock').clockpicker({
-      autoclose: true
-    });
-    
-    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
-    
     var obj = {
     	apikey: "33557a5d8adea6a4b473fca41b107a20",
     	init : function()
@@ -63,6 +51,19 @@
     	  }
     	}
     };
+$(document).ready(function(){
+    $('#isbnButton').click(function() {
+      obj.init();
+      obj.pingSearch();
+    });
+    
+    $('#clock').clockpicker({
+      autoclose: true
+    });
+    
+    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
+    
+    
   });
   
   $(function() {
