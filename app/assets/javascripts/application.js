@@ -15,5 +15,5 @@
 //= require turbolinks
 //= require_tree .
 //= require bootstrap-datepicker
-//= require jquery/clockpicker
+//= require jquery-clockpicker
 //= require countdown

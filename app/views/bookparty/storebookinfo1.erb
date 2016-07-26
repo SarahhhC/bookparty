@@ -4,65 +4,66 @@
 </head>
 <body>
   <script type="text/javascript">
+  var obj = {
+  	apikey: "33557a5d8adea6a4b473fca41b107a20",
+  	init : function()
+  	{
+  		obj.q = document.getElementById('q');
+  		obj.b = document.getElementById('isbnButton');
+  		obj.title = document.getElementById('first_name'); //title
+  		obj.author = document.getElementById('last_name'); //author
+  		obj.publisher = document.getElementById('publisher'); //publisher
+  		obj.now_price = document.getElementById('now_price'); //즉구가
+  		obj.b.onclick = obj.pingSearch;
+  	},
+  	// 검색을 요청하는 함수 
+   	pingSearch : function()
+   	{
+  	    if (obj.q.value)
+  	    {
+  	      obj.s = document.createElement('script');
+  	      obj.s.type ='text/javascript';
+  	      obj.s.charset ='utf-8';
+  	      obj.s.src = 'https://apis.daum.net/search/book?apikey=' + obj.apikey + '&q=' + encodeURI(obj.q.value)+'&searchType=isbn&output=json&callback=obj.pongSearch';
+  	      document.getElementsByTagName('head')[0].appendChild(obj.s);
+  	    }
+   	},
+   	// 검색 결과를 뿌리는 함수 
+  	pongSearch : function(z)
+  	{
+  	  if (z.channel.item[0] != null) {
+    	  $('#first_name').addClass("valid");
+    	  $('#_first_name').addClass("active");
+    	  $('#last_name').addClass("valid");
+    	  $('#_last_name').addClass("active");
+    	  $('#publisher').addClass("valid");
+    	  $('#_publisher').addClass("active");
+    	  $('#now_price').addClass("valid");
+    	  $('#_now_price').addClass("active");
+    		obj.title.value = z.channel.item[0].title;
+    		obj.author.value = z.channel.item[0].author;
+    		obj.publisher.value = z.channel.item[0].pub_nm;
+    		obj.now_price.value = z.channel.item[0].list_price;  //일단원가
+  	  }
+  	  else {
+  	    obj.q.value = "";
+  	    obj.q.placeholder = "ISBN 번호가 존재하지 않습니다";
+  	  }
+  	}
+  };
+  
   $(document).ready(function(){
+    $('#clock').clockpicker({
+      autoclose: true
+    });
+    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
+    
+    
+    
     $('#isbnButton').click(function() {
       obj.init();
       obj.pingSearch();
     });
-    
-    $('#clock').clockpicker({
-      autoclose: true
-    });
-    
-    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
-    
-    var obj = {
-    	apikey: "33557a5d8adea6a4b473fca41b107a20",
-    	init : function()
-    	{
-    		obj.q = document.getElementById('q');
-    		obj.b = document.getElementById('isbnButton');
-    		obj.title = document.getElementById('first_name'); //title
-    		obj.author = document.getElementById('last_name'); //author
-    		obj.publisher = document.getElementById('publisher'); //publisher
-    		obj.now_price = document.getElementById('now_price'); //즉구가
-    		obj.b.onclick = obj.pingSearch;
-    	},
-    	// 검색을 요청하는 함수 
-     	pingSearch : function()
-     	{
-    	    if (obj.q.value)
-    	    {
-    	      obj.s = document.createElement('script');
-    	      obj.s.type ='text/javascript';
-    	      obj.s.charset ='utf-8';
-    	      obj.s.src = 'https://apis.daum.net/search/book?apikey=' + obj.apikey + '&q=' + encodeURI(obj.q.value)+'&searchType=isbn&output=json&callback=obj.pongSearch';
-    	      document.getElementsByTagName('head')[0].appendChild(obj.s);
-    	    }
-     	},
-     	// 검색 결과를 뿌리는 함수 
-    	pongSearch : function(z)
-    	{
-    	  if (z.channel.item[0] != null) {
-      	  $('#first_name').addClass("valid");
-      	  $('#_first_name').addClass("active");
-      	  $('#last_name').addClass("valid");
-      	  $('#_last_name').addClass("active");
-      	  $('#publisher').addClass("valid");
-      	  $('#_publisher').addClass("active");
-      	  $('#now_price').addClass("valid");
-      	  $('#_now_price').addClass("active");
-      		obj.title.value = z.channel.item[0].title;
-      		obj.author.value = z.channel.item[0].author;
-      		obj.publisher.value = z.channel.item[0].pub_nm;
-      		obj.now_price.value = z.channel.item[0].list_price;  //일단원가
-    	  }
-    	  else {
-    	    obj.q.value = "";
-    	    obj.q.placeholder = "ISBN 번호가 존재하지 않습니다";
-    	  }
-    	}
-    };
   });
   
   $(function() {
