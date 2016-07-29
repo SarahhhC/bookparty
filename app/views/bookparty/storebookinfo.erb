@@ -1,6 +1,7 @@
 <head>
   <meta charset="UTF-8">
   <title>판매</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
   <script type="text/javascript">
@@ -75,12 +76,15 @@ $(document).ready(function(){
       <input type = "hidden" name = "user_id" value = "<%= session["user_id"] %>" >
       <input type = "hidden" name = "sellerip" value = "<%= request.remote_ip %>" >
 
-        <p class="titles"> Storebook Infomation </p>        
+        <p class="titles">판매할 책 정보를 입력하세요. </p>        
         
         <div class="input-field col s3" style="width: 400px" >
           <center>
             <input type="text" class="c-form-search" style="width: 300px; background: white;" id="q" name ="isbnsearch" placeholder=" ISBN 번호를 입력하세요." required />
-            <input type="button" value="search" class="c-form-submit btn-floating" id="isbnButton"/>
+            <!--input type="button" value="search" class="c-form-submit btn-floating" id="isbnButton"/-->
+
+             <button class="c-form-submit btn-floating" > <i class="material-icons" id="isbnButton">search</i></button>
+                              
           </center>
         </div>
         

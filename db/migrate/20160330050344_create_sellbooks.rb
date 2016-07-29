@@ -10,6 +10,9 @@ class CreateSellbooks < ActiveRecord::Migration
       t.integer :bookstate
       t.integer :booksellterm
       t.string :sellerip
+      t.integer :bookgrade
+      t.integer :bookview
+      t.integer :bookauction
       t.integer :user_id
       t.timestamps null: false
     end

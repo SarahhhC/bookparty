@@ -20,13 +20,12 @@
     </div>
     <% @sellbook %>
     <div class = "wrapper">
-<div class="row">
     <% @sellbook.each do |x| %>
       <!-- now는 현재시간 endtime은 종료시간 deadline은 반복문이 도는 기간 -->
       <%  Time.zone = 'Seoul'
           now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
           deadline = x.booksellterm - now.to_i %>
-  <script>
+      <script>
         $(function () {
           var id = <%= x.id %>;
             
@@ -81,17 +80,17 @@
           });
         });
       </script>
-  <div class="col-sm-6 col-md-4">
+      
       <div class="card">
         <div class="card-image waves-effect waves-block waves-light">
           <img class="activator" style="width:400px; height:300px;"src="<%= x.book_image.url %>">
         </div>
-        <div class="card-content"style="padding: 10px;">
+        <div class="card-content">
           <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
           <%  if deadline <= 0 %> <!-- deadline끝나면 경매 종료 -->
-            <br><b><span id = <%= 'endstate'+(x.id).to_s %>>종료된 매물입니다. </span></b>
+            <b><span id = <%= 'endstate'+(x.id).to_s %>>종료된 매물입니다. </span></b>
           <%  else %>
-            <br><b><span id = "<%= "endtime"+(x.id).to_s %>"></span></b>
+            <b><span id = "<%= "endtime"+(x.id).to_s %>"></span></b>
           <%  end %>
           <p>
             <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
@@ -165,12 +164,9 @@
         </div>
       </div>                  
       </div>
-      </div>
     </div>
+        
     <% end %> <!-- sellbook loop end -->
     </div>
-    </div>
   <% end %>  <!-- if end -->
-  
 </body>
-

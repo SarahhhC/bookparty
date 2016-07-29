@@ -168,7 +168,14 @@ class BookpartyController < ApplicationController
     sellbook.save
     redirect_to '/bookparty/my_page'
   end
-  
+
+  def delete 
+    @deletebook = Sellbook.find(params[:id])
+    @deletebook.destroy
+
+    redirect_to '/bookparty/my_page'
+  end
+
   def show_mac_address
     puts @mymacaddress
    

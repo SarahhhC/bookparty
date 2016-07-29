@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20160621205459) do
     t.string   "userpw"
     t.string   "usermail"
     t.string   "userphone"
+    t.float    "usergrade"
     t.datetime "created_at", :null=>false
     t.datetime "updated_at", :null=>false
   end
@@ -35,6 +36,9 @@ ActiveRecord::Schema.define(version: 20160621205459) do
     t.integer  "bookstate"
     t.integer  "booksellterm"
     t.string   "sellerip"
+    t.integer  "bookgrade"
+    t.integer  "bookview"
+    t.integer  "bookauction"
     t.integer  "user_id",       :foreign_key=>{:references=>"users", :name=>"fk_sellbooks_user_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__sellbooks_user_id"}
     t.datetime "created_at",    :null=>false
     t.datetime "updated_at",    :null=>false

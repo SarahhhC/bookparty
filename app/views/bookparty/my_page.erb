@@ -56,23 +56,7 @@
                     $('#'+'add_time'+id).css('display', 'inline-block');
                   });
                   
-                  $('#'+'delete_sell'+id).click(function(){
-                    var x = window.confirm("정말 삭제하시겠습니까?");
-                    if (x){    //확인
-                      if (<%= deadline %> < 604800) {//7일보다 적게 남았으면
-                          alert("경매종료기간이 일주일 이내이므로 삭제하실 수 없습니다!");
-                      }
-                      else {
-                          <% # Sellbook.find(x.id).delete %>
-                          alert("매물이 삭제되었습니다!");
-                          window.location.href = '/bookparty/my_page';
-                      }
-                    }
-                    else{   //취소
-                        return;
-                    }
-                  });
-                  
+                 
                   $('#'+'restore_sell'+id).click(function(){
                     var x = window.confirm("정말 수정하시겠습니까?");
                     if (x){    //확인
@@ -127,7 +111,7 @@
                   });
                 });
               </script>
-              
+              <!-- 판매탭 종료 안된 것 --> 
               <%  if deadline <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
                     @close << x %>
               <%  else %>
@@ -153,15 +137,17 @@
                         <p> 저자  <%= x.bookauthor %>  </p>
                         <p> 현재가격  <%= x.bookprice %> 원 </p>
                         <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
-                        <p>
-                          <a class="btn btn-default" role="button" id=<%= "restore_sell"+(x.id).to_s %>>수정</a>
-                          <a class="btn btn-default" role="button" id=<%= "delete_sell"+(x.id).to_s %>>삭제</a>
-                        </p>
+                        <% if deadline > 604800 %>
+                          <p>
+                            <a class="btn btn-default" role="button" id=<%= "restore_sell"+(x.id).to_s %>>수정</a>
+                            <a href="/bookparty/delete/<%= x.id %>" class="btn btn-default" role="button">삭제</a>
+                          </p>
+                        <% end %>
                   </div>
                 </div>
               <% end %>
             <% end %>
-
+            <!-- 판매탭 종료된 것 -->
             <% @close.each do |x| %> <!-- 종료된거 뿌려줌  -->
                 <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
@@ -269,7 +255,8 @@
           </div>
         </ul>
       </li>
-
+      
+      <!-- 구매탭 종료 안된 것 -->
       <li><a href="#link"><input type="button" id="buybookbtn" value="구매할 책" /></a>
         <ul class="tabcontent">
             <% @auction.each do |a| %>  <!-- 최근 업데이트 한 순으로 재배열 필요 -->
@@ -329,7 +316,8 @@
                   <% end %>
                 <% end %>
             <% end %>
-
+          
+             <!-- 구매탭 종료된 것 -->
             <% @close_buy.each do |x| %> <!-- 종료된거 뿌려줌  -->
                 <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
@@ -364,7 +352,7 @@
                       <p> 현재가격  <%= x.bookprice %> 원 </p>
                       <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
                       <p><a class="waves-effect waves-light btn" id=<%= "proceedBuy"+(x.id).to_s %>> 구매진행</a>
-                        <a href="#" class="btn btn-default" role="button">수정</a></p>
+                        <a href="#" class="btn btn-default" role="button">신고</a></p>
                     </div>
                 </div>
                 <!-- Modal Structure -->
@@ -402,7 +390,6 @@
                             <i class="material-icons" id="thumb">done</i>
                             <a class="waves-effect waves-light btn" id="feedback">save</a>
                           </td>
-                          <td><a href="#" class="btn btn-default" role="button">신고</a></td>
                         </tr>
                       </tbody>
                     </table>
