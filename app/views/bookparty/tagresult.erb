@@ -129,7 +129,7 @@
         <input type="image" id = "<%= "startExactBuy"+(x.id).to_s %>" src="/images/sellbuynow.png" width="85" height="35">
       <% end %>
       <!-- The Auction Modal (입찰하기버튼 눌렀을 때)-->
-      <div class = "modal" id = "<%= "Auction_open"+(x.id).to_s %>">
+      <div class = "modal modal-fixed-footer" id = "<%= "Auction_open"+(x.id).to_s %>">
         <div class="modal-content">
             <span class="close" > x </span>
             <table>

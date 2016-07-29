@@ -17,7 +17,6 @@
         <ul class="tabcontent">
           <% @sellbook %>
           <div class = "wrapper" >
-          <div class = "row" >
             <% @sellbook.each do |x| %>
               <%  Time.zone = 'Seoul'
                   now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
@@ -40,9 +39,22 @@
                     $('#' + "add_time" + id).hide();
                   });
             
+                  $('.star-rating').click(function() {
+                    $(this).parent().children("a").removeClass("on");
+                    $(this).addClass("on").prevAll("a").addClass("on");
+                    return false;
+                  });
+            
+                  $('#feedback').click(function(){
+                    $('.star_rating').css('display', 'none');
+                    $('#feedback').css('display', 'none');
+                    $('#thumb').css('display', 'block');
+                  });
+            
                   $('#'+'add'+id).click(function(){
                     $('#'+'add_time'+id).css('display', 'inline-block');
                   });
+                  
                  
                   $('#'+'restore_sell'+id).click(function(){
                     var x = window.confirm("정말 수정하시겠습니까?");
@@ -102,7 +114,6 @@
               <%  if deadline <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
                     @close << x %>
               <%  else %>
-              <div class= "col-sm-6 col-md-4">
                 <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
@@ -132,13 +143,12 @@
                           </p>
                         <% end %>
                   </div>
-                </div></div>
+                </div>
               <% end %>
             <% end %>
             <!-- 판매탭 종료된 것 -->
             <% @close.each do |x| %> <!-- 종료된거 뿌려줌  -->
-            <div class = "col-sm-6 col-md-4">
-            <div class="card">
+                <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
                   </div>
@@ -240,23 +250,17 @@
                       </form>
                   </div>
                 </div>
-                </div>
             <% end %>
           </div>
-       </div> <!-- row div end -->
-          </ul>
+        </ul>
       </li>
-
-
-
-
+      
       <!-- 구매탭 종료 안된 것 -->
       <li><a href="#link"><input type="button" id="buybookbtn" value="구매할 책" /></a>
         <ul class="tabcontent">
             <% @auction.each do |a| %>  <!-- 최근 업데이트 한 순으로 재배열 필요 -->
               <% @auction_book = Sellbook.where(id: a.sellbook_id).order('booksellterm ASC') %> <!--  #auction의 sellbook_id와 같은 책정보수집  -->
               <div class = "sell-book-list" >
-  <div class = "row">
                 <% @auction_book.each do |x| %>
                   <%  Time.zone = 'Seoul'
                       now = Time.zone.now
@@ -283,7 +287,6 @@
                   <%  if deadline_buy <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
                         @close_buy << x %>
                   <%  else %>
-                 <div class ="col-sm-6 col-md-4"> 
                 <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
@@ -309,15 +312,13 @@
                         <p><a href="#" class="btn btn-primary" role="button">판매 취소</a> <a href="#" class="btn btn-default" role="button">수정</a></p>
                   </div>
                 </div>
-                </div>
                   <% end %>
                 <% end %>
             <% end %>
           
              <!-- 구매탭 종료된 것 -->
             <% @close_buy.each do |x| %> <!-- 종료된거 뿌려줌  -->
-              <div class ="col-sm-6 col-md-4">    
-            <div class="card">
+                <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
                   </div>
@@ -379,14 +380,12 @@
                           <td><input type="image" src=<%= x.book_image %> style="max-width:20%; max-height:20%;"></td>
                           <td>
                           <span class="star-rating">
-                          <form>
-                            <input type="radio" name="bookgrade" value="1">
-                            <input type="radio" name="bookgrade" value="1">
-                            <input type="radio" name="bookgrade" value="2">
-                            <input type="radio" name="bookgrade" value="3">
-                            <input type="radio" name="bookgrade" value="4">
-                            <input type="radio" name="bookgrade" value="5">
-                          </form>
+                            <input type="radio" name="bookgrade" value="1"><i></i>
+                            <input type="radio" name="bookgrade" value="1"><i></i>
+                            <input type="radio" name="bookgrade" value="2"><i></i>
+                            <input type="radio" name="bookgrade" value="3"><i></i>
+                            <input type="radio" name="bookgrade" value="4"><i></i>
+                            <input type="radio" name="bookgrade" value="5"><i></i>
                           </span>
                           </td>
                         </tr>
@@ -394,10 +393,9 @@
                     </table>
                   </div>
                 </div>
-                </div>
             <% end %>
+
             </div>
-            </div> <!-- row end  -->
         </ul>
       </li>
     </ul>
