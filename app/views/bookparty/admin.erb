@@ -33,7 +33,7 @@
         <td style ="background-color: #E4E5E6">
           <p style ="font-size: 25px; color: #757677; font-style: bold; text-align: center"> 거래 통계 </p>
           <p style="color: #757677; font-style: bold; text-align:center"><i class="material-icons">assignment</i>교재 종류별 통계</p>
-          <canvas id="secondChart" style="width: 400px; height: 400px;"></canvas> 
+          <canvas id="secondChart"></canvas> 
           <script>
             var ctx = document.getElementById("secondChart");
            
@@ -66,18 +66,20 @@
               type: 'radar', 
               data: data,
               options: {
-              scale: {
-                reverse: true,
-                ticks: {
-                  beginAtZero: true
-                }
-             }
-          }
+                responsive: false,
+                maintainAspectRatio: false,
+                scale: {
+                  reverse: true,
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }  
+              }
          });
         </script>
-
+<!-- 
         <p style="color: #757677; font-style: bold; text-align:center"><i class="material-icons">my_location</i> 국가별 통계</p>
-        <canvas id="myChart" style="width: 400px; height: 400px;"></canvas> 
+        <canvas id="myChart"></canvas> 
         <script>
           var ctx = document.getElementById("myChart");
           var data = {
@@ -97,6 +99,9 @@
           data: data,
           type: "polarArea",
           options: {
+            responsive: false,
+            maintainAspectRatio: false,
+         
             elements: {
               arc: {
                 //borderColor: ["rgba(255,99,132,1)", "rgba(179,181,198,1)"]  
@@ -105,6 +110,7 @@
           }   
         });
         </script>
+        -->
        </td>
        <td>
         <p style="font-size: 25px; color: #757677; font-style: bold; text-align:center; margin-top:-150px; margin-left: -50px;">실시간 거래내역 </p>

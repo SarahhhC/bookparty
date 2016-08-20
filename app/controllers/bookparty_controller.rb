@@ -144,6 +144,21 @@ class BookpartyController < ApplicationController
     end
   end
   
+  def exact_buy
+    sellbook = Sellbook.find(params[:id])
+    sellbook.booksellterm = 0
+    sellbook.bookprice = sellbook.nowbookprice
+    sellbook.save
+    auction = Auction.new #새로 auction기록을 남기고 저장
+    auction.user_id = session[:user_id]
+    auction.sellbook_id = params[:id]
+    auction.auctionprice = sellbook.nowbookprice
+    auction.finished = 0
+    auction.save
+
+    render :json => {"result" => "success"}
+  end
+  
   def my_page
     @userid = session[:user_id]
     @username = User.find(@userid).username
@@ -179,6 +194,13 @@ class BookpartyController < ApplicationController
   def delete 
     @deletebook = Sellbook.find(params[:id])
     @deletebook.destroy
+
+    redirect_to '/bookparty/my_page'
+  end
+
+  def auction_delete
+    @auctiondelete = Auction.find_by_sellbook_id(params[:id])
+    @auctiondelete.destroy
 
     redirect_to '/bookparty/my_page'
   end

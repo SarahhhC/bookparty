@@ -34,7 +34,33 @@
           $('#' + 'endtime' + id).countdown({until: +<%= deadline %>});
           
           $('#' + "startExactBuy" + id).click(function() {
-            $('#' + "ExactBuy_open" + id).show();
+             var x = window.confirm("즉구 하시겠습니까?");
+             if (x) { 
+              $.ajax({
+                type: "POST",	//요청방식
+                url: "/bookparty/exact_buy",	//요청URL
+                data: {
+                  id: id
+                },
+                dataType:"json", //응답데이타타입
+                
+                success: function(result) {	//정상응답일 경우
+                  alert("즉구되었습니다.");
+                  window.location.href = '/bookparty/tagresult?tagSearch=<%= @showyes %>';
+                  return true;
+                },
+                error: function(result) {	//에러응답일 경우
+                  alert("즉구실패, 다시 시도해 주세요.");
+                  window.location.href = '/bookparty/tagresult?tagSearch=<%= @showyes %>';
+                  console.log(result);
+                  return false;
+                }
+               });
+          
+               } else{
+                return;
+              }
+              
           });
             
           $('#' + "startAuction" + id).click(function() {
@@ -112,7 +138,7 @@
           <p>책 저자 :<%= x.bookauthor %> </p>
           <p>책 출판사 <%= x.bookpublisher %> </p>
           <p>책 가격 : <%= x.bookprice %> 원 </p>
-            
+          <p>즉구 가격 : <%= x.nowbookprice %> 원 </p>
           <% if x.bookstate == 1 %>
               <p>책 상태 : "상" </p> <br>
           <% elsif x.bookstate == 2 %>
@@ -135,15 +161,12 @@
             <table>
               <tr>
                 <td>
-                  <p> <%= x.booktitle %> </p>
-                  <img src="<%= x.book_image.url %>" width="100px" height="200px"> <br>
                   <p> <b>현재가격  : <%= x.bookprice %> 원 </b> </p>
-                  <p> 즉구가격  : <%= x.nowbookprice %> 원 </p>
                   <p> 입찰가격 : <input type = "text" class = "<%= "auction-update"+(x.id).to_s %>" name = "bookprice"> 원 </p> <br><br> 
                   <input type="image" id = "<%= "joinAuction"+(x.id).to_s %>" data-id = "<%= x.id %>" src="/images/actionbtn.png" width="85" height="35">
                 </td>
                 <td>
-                  <h3>입찰 현황</h3>
+                  <b>입찰 현황</b>
                   <!-- 사람들이 얼마에 입찰하고 있는지 auction log 찍자 -->
                   <% @showAuctionHistory = Auction.where(sellbook_id: x) %>
                   <% @showAuctionHistory.order('auctionprice DESC').each do |a| %>
@@ -155,15 +178,7 @@
         </div>
       </div>
       <!-- The ExactBuy Modal (즉구버튼 눌렀을 때)-->
-      <div class = "modal" id = "<%= "ExactBuy_open"+(x.id).to_s %>">
-        <!-- Modal content -->
-        <div class="modal-content">
-          <span class="close" >x</span>
-          <p><%= x.booktitle %></p>
-          <p>현재가격  : <%= x.bookprice %> 원 </p>
-          <p><b>즉구가격  : <%= x.nowbookprice %> 원 </b></p>
-        </div>
-      </div>                  
+    
       </div>
       </div>
     </div>
