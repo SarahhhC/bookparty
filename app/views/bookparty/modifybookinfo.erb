@@ -1,0 +1,181 @@
+<head>
+  <meta charset="UTF-8">
+  <title>판매</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+<% sellbook = Sellbook.find(@book)%>
+  <script type="text/javascript">
+  var obj = {
+    	apikey: "33557a5d8adea6a4b473fca41b107a20",
+    	init : function()
+    	{
+    		obj.q = document.getElementById('q');
+    		obj.b = document.getElementById('isbnButton');
+    		obj.title = document.getElementById('first_name'); //title
+    		obj.author = document.getElementById('last_name'); //author
+    		obj.publisher = document.getElementById('publisher'); //publisher
+    		obj.now_price = document.getElementById('now_price'); //즉구가
+    		obj.b.onclick = obj.pingSearch;
+
+      	  $('#first_name').addClass("valid");
+      	  $('#_first_name').addClass("active");
+      	  $('#last_name').addClass("valid");
+      	  $('#_last_name').addClass("active");
+      	  $('#publisher').addClass("valid");
+      	  $('#_publisher').addClass("active");
+      	  $('#now_price').addClass("valid");
+      	  $('#_now_price').addClass("active");
+      		obj.title.value = "<%= sellbook.booktitle %>";
+        	obj.author.value = "<%= sellbook.bookauthor %>";
+          obj.publisher.value = "<%= sellbook.bookpublisher %>";
+ 
+      },
+    	// 검색을 요청하는 함수 
+     	pingSearch : function()
+     	{
+    	    if (obj.q.value)
+    	    {
+    	      obj.s = document.createElement('script');
+    	      obj.s.type ='text/javascript';
+    	      obj.s.charset ='utf-8';
+    	      obj.s.src = 'https://apis.daum.net/search/book?apikey=' + obj.apikey + '&q=' + encodeURI(obj.q.value)+'&searchType=isbn&output=json&callback=obj.pongSearch';
+    	      document.getElementsByTagName('head')[0].appendChild(obj.s);
+    	    }
+     	},
+     	// 검색 결과를 뿌리는 함수 
+    	pongSearch : function(z)
+    	{
+    	  if (z.channel.item[0] != null) {
+      	  $('#first_name').addClass("valid");
+      	  $('#_first_name').addClass("active");
+      	  $('#last_name').addClass("valid");
+      	  $('#_last_name').addClass("active");
+      	  $('#publisher').addClass("valid");
+      	  $('#_publisher').addClass("active");
+      	  $('#now_price').addClass("valid");
+      	  $('#_now_price').addClass("active");
+      		obj.title.value = z.channel.item[0].title;
+      		obj.author.value = z.channel.item[0].author;
+      		obj.publisher.value = z.channel.item[0].pub_nm;
+      		obj.now_price.value = z.channel.item[0].list_price;  //일단원가
+    	  }
+    	  else {
+    	    obj.q.value = "";
+    	    obj.q.placeholder = "ISBN 번호가 존재하지 않습니다";
+    	  }
+    	}
+    };
+$(document).ready(function(){
+
+    $('#isbnButton').click(function() {
+      obj.init();
+      obj.pingSearch();
+    });
+    
+    $('#clock').clockpicker({
+      autoclose: true
+    });
+    
+    $('.datepicker').datepicker({orientation: "top right", autoclose: true});
+    
+    $('first_name').value = "<%= sellbook.booktitle %>";
+ 
+    
+  });
+  
+  $(function() {
+      $('#tags_1').tagsInput();
+  });
+  </script>
+   <div class="row " style="background: white; width: 450px; height: 750px; margin-top: 30px; padding-top:10px">
+    <form method="post" action="/bookparty/modifybookinfo_complete" enctype="multipart/form-data" >
+      <input type = "hidden" name = "sellbook_id" value = "<%= @book %>" >
+      <input type = "hidden" name = "user_id" value = "<%= session["user_id"] %>" >
+      <input type = "hidden" name = "sellerip" value = "<%= request.remote_ip %>" >
+
+        <p class="titles">수정할 책 정보를 입력하세요. </p>        
+        
+        <div class="input-field col s3" style="width: 400px" >
+          <center>
+            <input type="text" class="c-form-search" style="width: 300px; background: white;" id="q" name ="isbnsearch" placeholder=" ISBN 번호를 입력하세요." required />
+             <input type="button" value="search" class="c-form-submit btn-floating" id="isbnButton"/>
+
+             <!--button class="c-form-submit btn-floating" > <i class="material-icons" id="isbnButton">search</i></button-->
+                             
+          </center>
+        </div>
+        
+        <div class="input-field col s3" style="width: 400px" validate valid>
+          <input id="first_name" name = "booktitle" type="text" class="validate" value="<%= sellbook.booktitle %>">
+          <label for="first_name" id="_first_name">책 제목</label>
+        </div>
+        <div style="width: 400px">
+          <div class="input-field col s3" style="width: 50%" >
+            <input id="last_name" type="text" name = "bookauthor" class="validate" value="<%= sellbook.bookauthor %>">
+            <label for="last_name" id="_last_name">책 저자</label>
+          </div>
+          <div class="input-field col s3" style="width: 50%" >
+            <input id="publisher" type="text" name = "bookpublisher" class="validate" value="<%= sellbook.bookpublisher %>">
+            <label for="publisher" id="_publisher">출판사</label>
+          </div>
+        </div>
+        <div style="width: 400px">
+          <div class="input-field col s3" style="width: 50%" >
+            <input id="start_price" type="text" name = "bookprice" class="validate">
+            <label for="start_price">시작 가격</label>
+          </div>
+          <div class="input-field col s3" style="width: 50%" >
+            <input id="now_price" type="text" name = "nowbookprice" class="validate" value="<%= sellbook.bookprice %>">
+            <label for="now_price" id="_now_price">즉구 가격</label>
+          </div>
+        </div>
+        <div style="width: 400px;">
+            <div class="input-field col s3" style="width: 50%">
+              <input type="text" placeholder="날짜를 선택하세요" class='datepicker' name = "booksellterm_date" >
+            </div>
+             <div class="input-field col s3" style="width: 50%">
+              <input type="text" placeholder="시간을 선택하세요" id="clock" name = "booksellterm_time">
+            </div>
+          </div>
+          <center>
+      <div class = "sellbook-input" style="width: 400px;">
+         <div class="hashtag-nameing" > 책상태  </div> 
+          <input name = "bookstate" type="radio" value="1" id="test1" />
+          <label for="test1">상</label>
+        
+          <input name = "bookstate" type="radio" value="2" id="test2" />
+          <label for="test2">중</label>
+        
+          <input name = "bookstate" type="radio" value="3" id="test3"  />
+          <label for="test3">하</label>
+        </div>
+        </center>
+        <center>
+        <div class="file-field input-field" style="width: 400px;" >
+          <div class="btn">
+            <i class="material-icons right">perm_media</i>
+            <span>책 사진</span>
+            <input type="file" name = "image_file">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" id="image" placeholder="책 사진을 업로드 하세요" type="text">
+          </div>
+        </div>
+      </center>
+          <center>
+          <div class = "hashtag-parent" >
+            <div class="hashtag-nameing" > 해시태그  </div> 
+            <div class="hashtag-input" >
+              <input id="tags_1" type = "text" class="tags" name = "hashtag"> 
+            </div>
+          </div>
+          </center>
+        <center style="margin-top: 30px">
+      <button class="btn waves-effect waves-light" type="submit" name="action">책 저장하기
+        <i class="material-icons right">send</i>
+      </button>
+      </center>
+    </form>
+  </div>
+</body>

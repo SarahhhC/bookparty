@@ -1,0 +1,136 @@
+<body>
+  <div class = "report-header" style = "margin-bottom: 10px; background-color: #757677; height: 150px;">
+    <p style = "color: #ECEAEC; font-size: 30px; text-align: center; margin-bottom: -15px;"> TODAYS REPORT </p>
+      <table style = "text-align: center;">
+        <tbody>
+          <tr>
+            <td>
+              <div class = "total-sellbook" style ="color: #FEFDFF; text-align: center;">
+                <div id = "total-counter" style="font-size: 35px; color: #E45357"> 114건 </div>
+                <div class = "total-notice" style="font-size: 20px;"> 거래된 책 </div>
+              </div>  
+            </td>
+            <td>
+              <div class = "total-auctioning" style ="color: #FEFDFF; text-align: center;">
+                <div id = "auctioning-counter" style="font-size: 35px; color: #E45357"> 24건 </div>
+                <div class = "auctioning-notice" style="font-size: 20px;"> 판매중인 책 </div>
+              </div>  
+            </td>
+            <td>
+              <div class = "total-claiming" style ="color: #FEFDFF; text-align: center;">
+                <div id = "auctioning-counter" style="font-size: 35px; color: #E45357"> 24건 </div>
+                <div class = "auctioning-notice" style="font-size: 20px;"> 판매중인 책 </div>
+              </div>  
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+
+  <table>
+    <tbody>
+      <tr>
+        <td style ="background-color: #E4E5E6">
+          <p style ="font-size: 25px; color: #757677; font-style: bold; text-align: center"> 거래 통계 </p>
+          <p style="color: #757677; font-style: bold; text-align:center"><i class="material-icons">assignment</i>교재 종류별 통계</p>
+          <canvas id="secondChart" style="width: 400px; height: 400px;"></canvas> 
+          <script>
+            var ctx = document.getElementById("secondChart");
+           
+            var data = {
+              labels: ["전공", "숙명여대", "알고리즘", "IT공학과", "컴퓨터공학과", "이종우교수님", "2학기"],
+              datasets: [
+              {
+                label: "My First Dataset",
+                backgroundColor: "rgba(179,181,198,0.2)",
+                borderColor: "rgba(179,181,198,1)",
+                pointBackgroundColor: "rgba(179,181,198,1)",
+                pointBorderColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(179,181,198,1)",
+                data: [65, 59, 90, 81, 56, 55, 40]
+              },
+              {
+                label: "My Second dataset",
+                backgroundColor: "rgba(255,99,132,0.2)",
+                borderColor: "rgba(255,99,132,1)",
+                pointBackgroundColor: "rgba(255,99,132,1)",
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: "rgba(255,99,132,1)",
+                data: [28, 48, 40, 19, 96, 27, 100]
+              }
+            ]
+          };
+          var myRadarChart = new Chart(ctx, {
+              type: 'radar', 
+              data: data,
+              options: {
+              scale: {
+                reverse: true,
+                ticks: {
+                  beginAtZero: true
+                }
+             }
+          }
+         });
+        </script>
+
+        <p style="color: #757677; font-style: bold; text-align:center"><i class="material-icons">my_location</i> 국가별 통계</p>
+        <canvas id="myChart" style="width: 400px; height: 400px;"></canvas> 
+        <script>
+          var ctx = document.getElementById("myChart");
+          var data = {
+            datasets: [{
+              data: [20, 16, 7, 3, 14],
+              backgroundColor: [
+                "rgba(255,99,132,0.4)", "rgba(75, 192, 192, 0.4)", "rgba(255, 206, 86, 0.4)", "rgba(191, 0, 255, 0.4)", "rgba(54, 162, 235, 0.4)"
+                ],
+              pointBackgroundColor: [
+                  "rgba(255,99,132,1)", "rgba(75, 192, 192, 1)", "rgba(255, 206, 86, 1)", "rgba(191, 0, 255, 1)", "rgba(54, 162, 235, 1)"
+                ],
+                label: 'My dataset'
+              }],
+              labels: ["대한민국", "일본", "중국", "프랑스", "인도"]
+          };
+         var myChart = new Chart(ctx, {
+          data: data,
+          type: "polarArea",
+          options: {
+            elements: {
+              arc: {
+                //borderColor: ["rgba(255,99,132,1)", "rgba(179,181,198,1)"]  
+              }
+            }
+          }   
+        });
+        </script>
+       </td>
+       <td>
+        <p style="font-size: 25px; color: #757677; font-style: bold; text-align:center; margin-top:-150px; margin-left: -50px;">실시간 거래내역 </p>
+        <p style="text-align: right"> 현재시각: <%= @real  %> </p>
+        <table class= "bordered responsive-table highlight striped centered">
+          <thead>
+            <tr>
+              <th data-field="id"> 결제시간 </th>
+              <th data-field="booktitle"> 책 제목 </th>
+              <th data-field="bookprice"> 가격 </th>
+              <th data-field="sellerip"> 판매자 IP </th>
+              <th data-field="booksellterm"> 남은 시간 </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @transaction.each do |x| %>
+              <tr>
+               <td> <%= x.booktitle %> </td>
+               <td> <%= x.bookprice %> </td>
+               <td> <%= x.sellerip %> </td>
+               <td> <%= x.booksellterm %> </td>
+              </tr>
+            <% end %>
+          </tbody>
+       </td>
+      </tr>
+    </tbody>
+  </table>
+</body>

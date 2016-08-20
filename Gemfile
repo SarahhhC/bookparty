@@ -1,4 +1,6 @@
 source 'https://rubygems.org'
+gem 'chartkick'
+gem 'chart-js-rails'
 
 gem 'figaro'
 

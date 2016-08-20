@@ -17,3 +17,4 @@
 //= require bootstrap-datepicker
 //= require jquery-clockpicker
 //= require countdown
+//= require chart
