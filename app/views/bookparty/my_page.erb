@@ -27,7 +27,19 @@
 <%  Time.zone = 'Seoul'
 now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
 deadline = x.booksellterm - now.to_i %>
+
 <script>
+          // Enable ationsChannel = pusher.subscribe('notifications');
+        //var pusher = new Pusher('8836b43546e7dfc4a293');
+        //var notificationsChannel = pusher.subscribe('notifications');
+        //notificationsChannel.bind('new_notification', function(notification){
+        //    var message = notification.message;
+        //    alert(message);
+        //});
+//var dispatcher = new WebSocketRails('203.252.195.148:80/bookparty/my_page');
+//  dispatcher.bind('tasks.create_success', function(task) {
+//  console.log('successfully created ' + task.name);
+//  }); 
 $(function () {
         var id = <%= x.id %>;
 
@@ -108,9 +120,9 @@ autoclose: true
     <div class="card-image waves-effect waves-block waves-light">
     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
     </div>
-    <div class="card-content">
+    <div class="card-content" style="padding: 10px;">
     <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-    <b><span id = "<%= x.id %>"></span></b>
+    </br><b><span id = "<%= x.id %>"></span></b>
     <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
     <% sellboook_tag.each do |t| %>
     <% taglist = Tag.find(t.tag_id) %>
@@ -143,9 +155,9 @@ autoclose: true
     <div class="card-image waves-effect waves-block waves-light">
     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
     </div>
-    <div class="card-content">
+    <div class="card-content" style="padding: 10px;">
     <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-    <b><span>종료된 매물입니다. </span></b>
+   </br> <b><span>종료된 매물입니다. </span></b>
     <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
     <% sellboook_tag.each do |t| %>
     <% taglist = Tag.find(t.tag_id) %>
@@ -172,11 +184,12 @@ autoclose: true
     <%  else  %>
         <%  notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
         unless notification.nil?
-        notification.checked = 1
-        notification.save
-        end %>
-    
-        <p><b>판매가격</b> : <%= x.bookprice %> 원 </p>
+            notification.checked = 1
+            notification.save
+        end 
+       
+        %>
+               <p><b>판매가격</b> : <%= x.bookprice %> 원 </p>
         <center>----------------------------------</center>
         <center>구매자정보</center>
         <center>----------------------------------</center>
@@ -185,6 +198,7 @@ autoclose: true
        
         <p><a class="waves-effect waves-light btn delaybtn" > 신고</a>
     <% end %>
+    
     </div>
     </div>
    <div class="modal modal-fixed-footer" id=<%= "add_time" + (x.id).to_s %>>
@@ -254,9 +268,9 @@ autoclose: true
     <div class="card-image waves-effect waves-block waves-light">
     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
     </div>
-    <div class="card-content">
+    <div class="card-content" style="padding: 10px;">
     <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-    <b><span id = "<%= "buyed"+(x.id).to_s %>"></span></b>
+    </br><b><span id = "<%= "buyed"+(x.id).to_s %>"></span></b>
     <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
     <% sellboook_tag.each do |t| %>
     <% taglist = Tag.find(t.tag_id) %>
@@ -294,9 +308,9 @@ autoclose: true
     <div class="card-image waves-effect waves-block waves-light">
     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
     </div>
-    <div class="card-content">
+    <div class="card-content"style="padding: 10px;" >
     <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-    <b><span>종료된 매물입니다. </span></b>
+    </br><b><span>종료된 매물입니다. </span></b>
     <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
     <% sellboook_tag.each do |t| %>
     <% taglist = Tag.find(t.tag_id) %>
@@ -309,25 +323,25 @@ autoclose: true
     <div class="card-reveal" id=<%= "card-reveal-buy"+(x.id).to_s %>>
     <span class="card-title grey-text text-darken-4"><center><b><%= x.booktitle %></b></center><i class="material-icons right">close</i></span>
     <% auction = Auction.where(sellbook_id: x.id, user_id: @userid, auctionprice: x.bookprice).take
-    if auction.nil? %>
-    <h5>거래뺏김...</h5>
+        if auction.nil? %>
+          <h5>거래뺏김...</h5>
     <%  else  %>
-    <% notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
-    unless notification.nil?
-    notification.checked = 1
-    notification.save
-    end %>
-    <p><b>책 저자</b> : <%= x.bookauthor %>  </p>
-    <p><b>출판사</b> : <%= x.bookpublisher %>  </p>
+        <% notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
+           unless notification.nil?
+             notification.checked = 1
+             notification.save
+           end %>
+        <p><b>책 저자</b> : <%= x.bookauthor %>  </p>
+        <p><b>출판사</b> : <%= x.bookpublisher %>  </p>
 
-    <p><b>구매가격</b> : <%= x.bookprice %> 원 </p>
-    <center>----------------------------------</center>
-    <center>판매자정보</center>
-    <center>----------------------------------</center>
-    <p><b>판매자</b> : <%= User.find(x.user_id).username %></p>
-    <p><b>연락처</b> : <%= User.find(x.user_id).userphone %></p>
+        <p><b>구매가격</b> : <%= x.bookprice %> 원 </p>
+        <center>----------------------------------</center>
+        <center>판매자정보</center>
+        <center>----------------------------------</center>
+        <p><b>판매자</b> : <%= User.find(x.user_id).username %></p>
+        <p><b>연락처</b> : <%= User.find(x.user_id).userphone %></p>
 
-    <p><a class="waves-effect waves-light btn delaybtn" > 신고</a>
+        <p><a class="waves-effect waves-light btn delaybtn" > 신고</a>
     <%  end  %>
     
     </div>

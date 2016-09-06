@@ -18,3 +18,18 @@
 //= require jquery-clockpicker
 //= require countdown
 //= require chart
+//= require websocket_rails
+
+var task = {
+      name: 'Start taking advantage of WebSockets',
+      completed: false
+}
+
+var dispatcher = new WebSocketRails('203.252.195.148:80/websocket');
+
+dispatcher.bind('tasks.create_success', function(task) {
+console.log('successfully created ');
+});
+dispatcher.trigger('tasks.create', task);
+
+

@@ -1,4 +1,55 @@
 class BookpartyController < ApplicationController
+  def noti
+    Time.zone = 'Seoul'
+    now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
+    sellbook = Sellbook.all
+    sellbook.each do |x|
+      deadline = x.booksellterm - now.to_i
+      if deadline <= 0
+        auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice, finished: 0).take
+        unless auction.nil?
+          notification = Notification.new 
+          notification.user_id = x.user_id
+          notification.sellbook_id = x.id
+          notification.seller_or_buyer = 1 #seller면 1
+          notification.checked = 2 #확인 안 했으면 2
+          notification.save
+          auction.finished = 1
+          auction.save
+        end
+           
+        success = Auction.where(sellbook_id: x.id, user_id: session[:user_id], auctionprice: x.bookprice, finished: 1).take
+        unless success.nil?
+          notification = Notification.new 
+          notification.user_id = session[:user_id]
+          notification.sellbook_id = x.id
+          notification.seller_or_buyer = 2 #seller면 1
+          notification.checked = 2 #확인 안 했으면 2
+          notification.save
+          success.finished = 2
+          success.save
+        end
+      end
+    end
+
+    unless session[:user_id].nil?
+    count = Notification.where(user_id: session[:user_id], checked: 2).count
+      unless count == 0 
+        sold = Notification.where(user_id: session[:user_id], checked: 2, seller_or_buyer: 1)
+        @soldcount = sold.count
+        buyed = Notification.where(user_id: session[:user_id], checked: 2, seller_or_buyer: 2)
+        @buyedcount = buyed.count
+        if @soldcount != 0 || @buyedcount != 0
+          @check = 1
+        else
+          @check = 0
+        end
+      end
+    end
+ 
+    render :json => {"result" => @check}
+  end
+
   def admin
     Time.zone = 'Seoul'
     @real = Time.current
@@ -17,13 +68,16 @@ class BookpartyController < ApplicationController
       if usermail_exist_check
         redirect_to '/bookparty/signup', alert: '이메일이 이미 존재합니다.'
       elsif
-        user = User.new
-        user.username = params[:username]
-        user.usermail = params[:usermail]
-        user.userpw = params[:userpw]
-        user.userschool = params[:userschool]
-        user.userphone = params[:userphone]
-        user.save
+        @user = User.new
+        @user.username = params[:username]
+        @user.usermail = params[:usermail]
+        @user.userpw = params[:userpw]
+        @user.userschool = params[:userschool]
+        @user.userphone = params[:userphone]
+        if @user.save
+          WebsocketRails[:username].trigger 'create_success', @user
+        end
+  
         redirect_to '/bookparty/login'
       end
     end
@@ -59,6 +113,9 @@ class BookpartyController < ApplicationController
   #메인 검색페이지입니다
   def search
       @userid = session[:user_id]
+      if @userid
+         WebsocketRails[:tasks].trigger 'create_success', @userid
+      end
       #비회원일때
       if @userid.nil?
         @alertNonUser = "비회원 이십니다."
@@ -86,6 +143,9 @@ class BookpartyController < ApplicationController
   end
 	  
   def storebookinfo
+# Pusher.trigger('test_channel', 'my_event', {
+#               message: 'hello world'
+#                   })
   end
     
   def storebookinfo_complete
@@ -117,6 +177,7 @@ class BookpartyController < ApplicationController
         sellbook.tags << hashtag
     end
     sellbook.save
+
     redirect_to '/bookparty/search'
   end
     
@@ -170,6 +231,13 @@ class BookpartyController < ApplicationController
     @auction = Auction.where(user_id: @userid)
     @close = Array.new
     @close_buy = Array.new
+
+#require 'pusher'
+#pusher = Pusher::Client.new app_id: 'YOUR APP ID', key: 'YOUR APP KEY', secret: 'YOUR APP SECRET'
+#Pusher.trigger('notifications', 'new_notification', {
+#    message: 'hello'
+#   })
+
   end
   
   def seller_page

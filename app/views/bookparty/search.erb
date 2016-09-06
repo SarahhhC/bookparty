@@ -17,8 +17,8 @@
     <!-- div class="section" id="section0"-->
       <% unless @userid.nil? %>
         <a class="users" href="/bookparty/logout" style="text-decoration:none; font-size: 15px" >
-        <i class="large material-icons">power_settings_new</i></a><br>
-        <p class="users"><%= @username %>님 환영합니다.</p><br>
+        <i class="material-icons" style="font-size:60px;">power_settings_new</i></a><br>
+        <p class="users" style="font-size:25px;"><b><%= @username %></b>님 환영합니다.</p><br>
         <p class="title">책파리 피플</p><br>
         <h2>모두가 합리적인 중고책거래를 할 수 있습니다!<br>지금부터 시작해 보세요.</h2>
       <% else %>

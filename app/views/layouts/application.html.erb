@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Workspace</title>
+  <title>책 파는 사람들 북파리</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://js.pusher.com/3.2/pusher.min.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'countdown' %>
@@ -21,68 +22,61 @@
 <script src="/javascript/jquery.tagsinput.js"></script>
 <script src="/javascript/jquery-countdown.js"></script>
 <script src="/javascript/chart.js"></script>
-
-
+   
 </head>
 <body>
+<script>
+<% @check %>
+$(function() {
+  $(document).ready(function() {
+     setInterval(function() {
+       jQuery.ajax({
+         url: "/bookparty/noti",
+         type: "GET",
+
+         1: function(result) {	//정상응답일 경우
+           console.log(<%= @check %>);
+           return true;
+         },
+         0: function(result) {
+           console.log(<%= @check %>);
+           return true;
+         },
+         error: function(result) {	//에러응답일 경우
+           console.log(result);
+           return false;
+         }
+       });
+     }, 3000); // In every 3 seconds
+  });
+});
+
+</script>
+
   <% unless session[:user_id].nil? %>
-    <a class="users" href="/bookparty/search" style="text-decoration:none; font-size: 15px" >Home</a>
+    <a class="users" href="/bookparty/search" style="text-decoration:none; font-size: 15px" ><i class="material-icons" style="font-size:60px;">airplay</i></a>
     <a href="/bookparty/storebookinfo"><input type = "image" id="storebtn" src="/images/storebookinfo.png"></a>
     <a class = "my_page" href="/bookparty/my_page">
       <input type = "image" id="mypagebtn" src="/images/mypage.png" style="margin-left: 15px;">
-      <%
-        Time.zone = 'Seoul'
-        now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
-        sellbook = Sellbook.all
-        sellbook.each do |x|
-          deadline = x.booksellterm - now.to_i
-          if deadline <= 0
-            auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice, finished: 0).take
-            unless auction.nil?
-              notification = Notification.new 
-              notification.user_id = x.user_id
-              notification.sellbook_id = x.id
-              notification.seller_or_buyer = 1 #seller면 1
-              notification.checked = 2 #확인 안 했으면 2
-              notification.save
-              auction.finished = 1
-              auction.save
-            end
-            
-            success = Auction.where(sellbook_id: x.id, user_id: session[:user_id], auctionprice: x.bookprice, finished: 1).take
-            unless success.nil?
-              notification = Notification.new 
-              notification.user_id = session[:user_id]
-              notification.sellbook_id = x.id
-              notification.seller_or_buyer = 2 #seller면 1
-              notification.checked = 2 #확인 안 했으면 2
-              notification.save
-              success.finished = 2
-              success.save
-            end
-          end
-        end
-      %>
-      <% unless session[:user_id].nil?
-          count = Notification.where(user_id: session[:user_id], checked: 2).count
-          unless count == 0 
-               sold = Notification.where(user_id: session[:user_id], checked: 2, seller_or_buyer: 1)
-               soldcount = sold.count
-               buyed = Notification.where(user_id: session[:user_id], checked: 2, seller_or_buyer: 2)
-               buyedcount = buyed.count %>
-            <ul id="dropdown2" class="dropdown-content">
-              <% if soldcount != 0 %>
-              <% #여기물어보잣 판매구매탭으로 바로이동하는 법! %>
-                  <li><a href="/bookparty/my_page"><p style="font-size:10pt;">판매<span class="new badge"><%= soldcount %></span></p></a></li>
-              <% elsif buyedcount != 0 %>
-                  <li><a href="/bookparty/my_page"><p style="font-size:10pt;">구매<span class="new badge"><%= buyedcount %></span></p></a></li>
-              <% end %>
-            </ul>
-            <a class="btn dropdown-button" href="#!" data-activates="dropdown2" style="font-size:8pt; padding: 5px; height:30px; font-weight:900">Up<i class="mdi-navigation-arrow-drop-down center"></i></a>
-            
-        <% end %>
-      <% end %>
-    </a>
+  
+        <ul id="dropdown2" class="dropdown-content">
+          <li>
+            <a href="/bookparty/my_page">
+              <p style="font-size:10pt;">판매
+                <span class="new badge"><%= @soldcount %></span>
+              </p>
+            </a>
+          </li>
+          <li id="buy">
+            <a href="/bookparty/my_page">
+              <p style="font-size:10pt;">구매
+                <span class="new badge"><%= @buyedcount %></span>
+              </p>
+            </a>
+          </li>
+        </ul>
+        <a class="btn-medium dropdown-button" href="#!" data-activates="dropdown2" style="padding:1;"><i class="mdi-navigation-arrow-drop-down center"><i class="material-icons" style="font-size:40px;">chat</i></i></a>
+        </a>
   <% end %>
 <%= yield %>
 

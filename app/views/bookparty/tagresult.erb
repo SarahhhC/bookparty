@@ -87,7 +87,7 @@
                   return true;
                 },
                 error: function(result) {	//에러응답일 경우
-                  alert("비정상적인 입찰이 시도되었습니다.");
+                  alert("한 발 늦으셨습니다! 다시 시도해주세요.");
                   window.location.href = '/bookparty/tagresult?tagSearch=<%= @showyes %>';
                   console.log(result);
                   return false;
@@ -162,15 +162,14 @@
               <tr>
                 <td>
                   <p> <b>현재가격  : <%= x.bookprice %> 원 </b> </p>
-                  <p> 입찰가격 : <input type = "text" class = "<%= "auction-update"+(x.id).to_s %>" name = "bookprice"> 원 </p> <br><br> 
+                  <p> 입찰가격 : <input type = "text" class = "<%= "auction-update"+(x.id).to_s %>" name = "bookprice" style="width:50%;"> 원 </p> 
+                  </br> 
                   <input type="image" id = "<%= "joinAuction"+(x.id).to_s %>" data-id = "<%= x.id %>" src="/images/actionbtn.png" width="85" height="35">
-                </td>
-                <td>
-                  <b>입찰 현황</b>
+                  </br><b>입찰 현황</b> </br>
                   <!-- 사람들이 얼마에 입찰하고 있는지 auction log 찍자 -->
                   <% @showAuctionHistory = Auction.where(sellbook_id: x) %>
                   <% @showAuctionHistory.order('auctionprice DESC').each do |a| %>
-                    <%= a.user_id %> 님이 <%= a.auctionprice %>원에 <%= a.created_at %>에 입찰하셨습니다. <br>
+                    <%= User.find(a.user_id).username %> 님이 <%= a.auctionprice %>원에 <%= a.created_at %>에 입찰하셨습니다. <br>
                   <% end %>
                 </td>
                 </tr>
