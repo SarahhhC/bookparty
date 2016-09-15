@@ -26,58 +26,59 @@
 </head>
 <body>
 <script>
-<% @check %>
-$(function() {
-  $(document).ready(function() {
-     setInterval(function() {
-       jQuery.ajax({
-         url: "/bookparty/noti",
-         type: "GET",
-
-         1: function(result) {	//정상응답일 경우
-           console.log(<%= @check %>);
-           return true;
-         },
-         0: function(result) {
-           console.log(<%= @check %>);
-           return true;
-         },
-         error: function(result) {	//에러응답일 경우
-           console.log(result);
-           return false;
-         }
-       });
-     }, 3000); // In every 3 seconds
+  $(function() {
+    $(document).ready(function() {
+      setInterval(function() {
+        jQuery.ajax({
+          url: "/bookparty/noti",
+          type: "GET",
+          success: function(result) {	//정상응답일 경우
+            console.log(result);
+            if (result.soldcount > 0) {
+              document.getElementById('sell').innerHTML = result.soldcount;
+              document.getElementById('sell_link').href = '/bookparty/my_page#sell_link'+result.sellid;
+            }
+            if (result.buyedcount > 0) {
+              document.getElementById('buy').innerHTML = result.buyedcount;
+              document.getElementById('buy_link').href = '/bookparty/my_page#buybook';
+            }
+            return true;
+          },
+          error: function(result) {	//에러응답일 경우
+            console.log(result);
+            return false;
+          }
+        });
+      }, 1000); // In every 1 seconds
+    });
   });
-});
-
 </script>
 
-  <% unless session[:user_id].nil? %>
-    <a class="users" href="/bookparty/search" style="text-decoration:none; font-size: 15px" ><i class="material-icons" style="font-size:60px;">airplay</i></a>
-    <a href="/bookparty/storebookinfo"><input type = "image" id="storebtn" src="/images/storebookinfo.png"></a>
-    <a class = "my_page" href="/bookparty/my_page">
-      <input type = "image" id="mypagebtn" src="/images/mypage.png" style="margin-left: 15px;">
-  
-        <ul id="dropdown2" class="dropdown-content">
-          <li>
-            <a href="/bookparty/my_page">
-              <p style="font-size:10pt;">판매
-                <span class="new badge"><%= @soldcount %></span>
-              </p>
-            </a>
-          </li>
-          <li id="buy">
-            <a href="/bookparty/my_page">
-              <p style="font-size:10pt;">구매
-                <span class="new badge"><%= @buyedcount %></span>
-              </p>
-            </a>
-          </li>
-        </ul>
-        <a class="btn-medium dropdown-button" href="#!" data-activates="dropdown2" style="padding:1;"><i class="mdi-navigation-arrow-drop-down center"><i class="material-icons" style="font-size:40px;">chat</i></i></a>
-        </a>
-  <% end %>
+<% unless session[:user_id].nil? %>
+  <a class="users" href="/bookparty/search" style="text-decoration:none; font-size: 15px" >
+    <i class="material-icons" style="font-size:60px;">airplay</i>
+  </a>
+  <a href="/bookparty/storebookinfo">
+    <input type = "image" id="storebtn" src="/images/storebookinfo.png">
+  </a>
+  <a class = "my_page" href="/bookparty/my_page">
+    <input type = "image" id="mypagebtn" src="/images/mypage.png" style="margin-left: 15px;">
+  </a>
+  <div>
+    <ul id="dropdown2" class="dropdown-content">
+      <li>
+        <a id="sell_link"><p style="font-size:10pt;">판매<span class="new badge" id="sell"></span></p></a>
+      </li>
+      <li>
+        <a id="buy_link"><p style="font-size:10pt;">구매<span class="new badge" id="buy"></span></p></a>
+      </li>
+    </ul>
+  </div>
+  <a class="btn-medium dropdown-button" href="#!" data-activates="dropdown2" style="padding:1;">
+    <i class="mdi-navigation-arrow-drop-down center">
+    <i class="material-icons" style="font-size:40px;">chat</i></i>
+  </a>
+<% end %>
 <%= yield %>
 
 </body>
