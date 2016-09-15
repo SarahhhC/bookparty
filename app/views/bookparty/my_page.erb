@@ -29,17 +29,6 @@ now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되�
 deadline = x.booksellterm - now.to_i %>
 
 <script>
-          // Enable ationsChannel = pusher.subscribe('notifications');
-        //var pusher = new Pusher('8836b43546e7dfc4a293');
-        //var notificationsChannel = pusher.subscribe('notifications');
-        //notificationsChannel.bind('new_notification', function(notification){
-        //    var message = notification.message;
-        //    alert(message);
-        //});
-//var dispatcher = new WebSocketRails('203.252.195.148:80/bookparty/my_page');
-//  dispatcher.bind('tasks.create_success', function(task) {
-//  console.log('successfully created ' + task.name);
-//  }); 
 $(function () {
         var id = <%= x.id %>;
 

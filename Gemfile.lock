@@ -49,9 +49,6 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
-    chart-js-rails (0.1.0)
-      railties (> 3.1)
-    chartkick (2.0.2)
     clockpicker-rails (0.0.2)
       railties (>= 3.1)
     coffee-rails (4.1.1)
@@ -372,8 +369,6 @@ DEPENDENCIES
   bootstrap-datepicker-rails
   byebug
   carrierwave
-  chart-js-rails
-  chartkick
   clockpicker-rails
   coffee-rails (~> 4.1.0)
   countdown

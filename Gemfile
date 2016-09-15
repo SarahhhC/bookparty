@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 gem 'sinatra'
 gem 'pusher'
 gem 'websocket-rails'
-gem 'chartkick'
-gem 'chart-js-rails'
-
 gem 'figaro'
 
 gem 'mac-address'

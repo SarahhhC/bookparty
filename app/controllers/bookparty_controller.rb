@@ -56,6 +56,7 @@ class BookpartyController < ApplicationController
 
     @transaction = Sellbook.all
   end
+
   def signup
   end
     
@@ -84,6 +85,9 @@ class BookpartyController < ApplicationController
   end
     
   def login
+    unless session[:user_id].nil?
+      redirect_to '/bookparty/search'
+    end
   end
  
   def login_complete
@@ -132,20 +136,19 @@ class BookpartyController < ApplicationController
       @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch}).take
       
       if @sellbook.nil?
-          @showno = "존재하지 않는 태그입니다."
-          @showyes = @tagSearch
+          @showyes = '존재하지 않는 태그입니다. 다른 태그로 검색해보세요!'
           @sellbook = Sellbook.all
       else
-          @showyes = @tagSearch
+          @showyes = @tagSearch + ' 에 대한 검색결과입니다.'
           #view에서 뿌려주기 위해
           @sellbook = Sellbook.joins(:tags).where(tags:{tagname: @tagSearch})
       end
   end
 	  
   def storebookinfo
-# Pusher.trigger('test_channel', 'my_event', {
-#               message: 'hello world'
-#                   })
+    if session[:user_id].nil?
+      redirect_to '/bookparty/login'
+    end 
   end
     
   def storebookinfo_complete
@@ -221,23 +224,20 @@ class BookpartyController < ApplicationController
   end
   
   def my_page
-    @userid = session[:user_id]
-    @username = User.find(@userid).username
+   # if session[:user_id].nil?
+  #    redirect_to '/bookparty/login'
+  #  else 
+      @userid = session[:user_id]
+      @username = User.find(@userid).username
     
-    #current-user가 판매할 책 - 남은시간의 "최신순"으로 정렬시킨다
-    @sellbook = Sellbook.where(user_id: @userid).order('booksellterm ASC')
+      #current-user가 판매할 책 - 남은시간의 "최신순"으로 정렬시킨다
+      @sellbook = Sellbook.where(user_id: @userid).order('booksellterm ASC')
     
-    #current-user가 참여한 경매 리스트
-    @auction = Auction.where(user_id: @userid)
-    @close = Array.new
-    @close_buy = Array.new
-
-#require 'pusher'
-#pusher = Pusher::Client.new app_id: 'YOUR APP ID', key: 'YOUR APP KEY', secret: 'YOUR APP SECRET'
-#Pusher.trigger('notifications', 'new_notification', {
-#    message: 'hello'
-#   })
-
+      #current-user가 참여한 경매 리스트
+      @auction = Auction.where(user_id: @userid)
+      @close = Array.new
+      @close_buy = Array.new
+   # end
   end
   
   def seller_page

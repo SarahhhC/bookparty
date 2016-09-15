@@ -3,20 +3,13 @@
 </head>
 <body>
   <!-- 해당 태그가 존재하지 않을때 -->
-  <% if @showno %>
-      <center>
-          <div class="showNo">
-              <%=@showno %>
-          </div>
-      </center>
-  <% end %>
 
   <!-- 검색 태그 관련 매물리스트 -->
   <br><br>
     <!-- 해당 태그가 존재 할 때 -->
   <% if @sellbook %>
     <div class="showYes">
-        <h2> <%=@showyes %> 에 대한 검색결과입니다.  </h2>
+        <h2> <%=@showyes %></h2>
     </div>
     <% @sellbook %>
     <div class = "wrapper">
