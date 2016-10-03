@@ -5,6 +5,7 @@ class CreateSellbooks < ActiveRecord::Migration
       t.string :book_image
       t.string :bookauthor
       t.string :bookpublisher
+      t.integer :bookinitprice
       t.integer :bookprice
       t.integer :nowbookprice
       t.integer :bookstate

@@ -1,348 +1,372 @@
 <head>
-<meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <div>
-<center> <p id="mypagetitle">My Page</p> </center>
-<div class = "current-user"  style="display: inline-block; float: right">
-<div class = "userface" style = "display: inline-block" > <img width="30px" height="30px" src="/images/current-user.png" alt="current-user"> </div>
-<div class ="username" style="display: inline-block; font-size: 20px; color: white;"> <%= @username %> 님 </div>
-</div>
+  <center> <p id="mypagetitle">My Page</p> </center>
+  <div class = "current-user"  style="display: inline-block; float: right">
+    <div class = "userface" style = "display: inline-block" > <img width="30px" height="30px" src="/images/current-user.png" alt="current-user"> </div>
+    <div class ="username" style="display: inline-block; font-size: 20px; color: white;"> <%= @username %> 님 </div>
+  </div>
 </div>
 
 <br><br>
 <ul class="nav nav-pills" style="margin-left:30px;">
-<li class="active"><a data-toggle="pill" href="#sellbook">판매할 책 </a></li>
-<li><a data-toggle="pill" href="#buybook">구매할 책 </a></li>
+  <li class="active"><a data-toggle="pill" href="#sellbook">판매할 책 </a></li>
+  <li><a data-toggle="pill" href="#buybook">구매할 책 </a></li>
 </ul>
 
-<div class="tabmenus tab-content">
-<div id="sellbook" class="tab-pane fade in active">
-<ul  class="tabcontents">
-<% @sellbook %>
-<div class = "wrapper" >
-<div class = "row" >
+<div class="tabmenu tab-content">
+  <div id="sellbook" class="tab-pane fade in active">
+    <div class="tabcontents">
+    <% @sellbook %>
+    <div class = "wrapper" >
+      <div class = "row" >
 <% @sellbook.each do |x| %>
-<%  Time.zone = 'Seoul'
-now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
-deadline = x.booksellterm - now.to_i %>
+  <%  Time.zone = 'Seoul'
+      now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
+      deadline = x.booksellterm - now.to_i %>
 
-<script>
-$(function () {
-        var id = <%= x.id %>;
+<script type="text/javascript">
+  $(function () {
+      var id = <%= x.id %>;
 
-        $('#' + id).countdown({until: +<%= deadline %>});
-        $('#' + 'endtime' + id).countdown({until: +<%= deadline %>});
+      $('#' + id).countdown({until: +<%= deadline %>});
+       
+      $('#' + 'endtime' + id).countdown({until: +<%= deadline %>});
 
-        $('.close').click(function() {
-                $('#' + "add_time" + id).hide();
-                });
+      $('.close').click(function() {
+        $('#' + "add_time" + id).hide();
+      });
 
-        $('#'+'add'+id).click(function(){
-                $('#'+'add_time'+id).css('display', 'inline-block');
-                });
+      $('#'+'add'+id).click(function(){
+        $('#'+'add_time'+id).css('display', 'inline-block');
+      });
 
-        $('#'+'restore_sell'+id).click(function(){
-                var x = window.confirm("정말 수정하시겠습니까?");
-                if (x){    //확인
-                    <% if deadline < 604800 #7일보다 적게 남았으면 %>
-                      alert("경매종료기간이 일주일 이내이므로 수정하실 수 없습니다!");
-                    <% else %>
-                      window.location.href = '/bookparty/modifybookinfo?book=<%= x.id %>';
-                    <% end %>
-                }else{   //취소
-                return;
-                }
-         });
+      $('#'+'restore_sell'+id).click(function(){
+        var x = window.confirm("정말 수정하시겠습니까?");
+        if (x) {    //확인
+          <% if deadline < 604800 #7일보다 적게 남았으면 %>
+               alert("경매종료기간이 일주일 이내이므로 수정하실 수 없습니다!");
+          <% else %>
+               window.location.href = '/bookparty/modifybookinfo?book=<%= x.id %>';
+          <% end %>
+        }else {   //취소
+          return;
+        }
+      });
+        
+      $('#'+'warn'+id).click(function(){
+        var x = window.confirm("정말 신고하시겠습니까?");
+        if (x){
+          window.location.href = '/bookparty/warn/<%= x.id %>';
+        }else {
+          return;
+        }
+      });
+        
+      $('.delaybtn').click(function(){
+        $('.card-reveal').css('display','none');
+      });
 
-        $(document).ready(function() {
-                $('.clock').clockpicker({
-autoclose: true
-});
 
-                $('.datepicker').datepicker({orientation: "top right", autoclose: true});
+      $(document).ready(function() {
+        $('.clock').clockpicker({
+          autoclose: true
+        });
 
-                $('.modal').css('display', 'none');
+        $('.datepicker').datepicker({orientation: "top right", autoclose: true});
 
-                $('.delaybtn').click(function(){
-                    $('.card-reveal').css('display','none');
-                    });
-                $(".tabmenu").each(function() {
-                    var tab = $(this).children("ul");
-                    var tabBtn = tab.children("li").children("a");
-                    var content = tabBtn.nextAll();
+        $('.modal').css('display', 'none');
 
-                    tabBtn.click(function(){ //탭버튼을 클릭했을때
+        $(".tabmenu").each(function() {
+          var tab = $(this).children("ul");
+          var tabBtn = tab.children("li").children("a");
+          var content = tabBtn.nextAll();
 
-                            if( $(this).hasClass("on") ) return; // 이미 on 상태면 pass
-                            content.hide(); // 모든 컨텐츠 부분을 안보이게 한뒤
+          tabBtn.click(function(){ //탭버튼을 클릭했을때
 
-                            $(this).nextAll().show(); // 클릭한 tab 버튼(a태그) 옆의 모든 태그들은 보이도록
-                            tabBtn.removeClass("on"); // 모든탭 버튼에 있던 on 클래스를 빼고
-                            $(this).addClass("on"); // 현재 클릭한 탭메뉴 버튼에 on 클래스 추가
-                            // 탭버튼를 쭉 돌면서 on 클래스가 있는 버튼만 on 이미지로 바꾸고
-                            // 나머지 버튼들은 off 이미지로 바꾼다.
-                            tabBtn.each(function() {
-                                    var src;
-                                    var img = $(this).children("img");
-                                    if( $(this).hasClass("on") ) {
-                                    src = img.attr("src").replace("_off.", "_on.");
-                                    } else {
-                                    src = img.attr("src").replace("_on.", "_off.");
-                                    }
-                                    img.attr("src", src);
-                                    });
-                            });
-                    // 맨첫번째 탭버튼 클릭처리
-                    tabBtn.eq(0).click();
-                });
-});
-});
+            if( $(this).hasClass("on") ) return; // 이미 on 상태면 pass
+            content.hide(); // 모든 컨텐츠 부분을 안보이게 한뒤
+
+            $(this).nextAll().show(); // 클릭한 tab 버튼(a태그) 옆의 모든 태그들은 보이도록
+            tabBtn.removeClass("on"); // 모든탭 버튼에 있던 on 클래스를 빼고
+            $(this).addClass("on"); // 현재 클릭한 탭메뉴 버튼에 on 클래스 추가
+            // 탭버튼를 쭉 돌면서 on 클래스가 있는 버튼만 on 이미지로 바꾸고
+            // 나머지 버튼들은 off 이미지로 바꾼다.
+            tabBtn.each(function() {
+              var src;
+              var img = $(this).children("img");
+              if( $(this).hasClass("on") ) {
+                src = img.attr("src").replace("_off.", "_on.");
+              } else {
+                src = img.attr("src").replace("_on.", "_off.");
+              }
+              img.attr("src", src);
+            });
+          });
+          // 맨첫번째 탭버튼 클릭처리
+          tabBtn.eq(0).click();
+        });
+      });
+  });
 </script>
-    <!-- 판매탭 종료 안된 것 -->
-<%  if deadline <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
+  <!-- 판매탭 종료 안된 것 -->
+  <%  if deadline <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
     @close << x %>
-    <%  else %>
+  <%  else %>
     <div class= "col-sm-6 col-md-4">
+      <div class="card">
+        <div class="card-image waves-effect waves-block waves-light">
+          <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
+        </div>
+        <div class="card-content" style="padding: 10px;">
+          <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+          </br><b><span id = "<%= x.id %>"></span></b>
+          <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
+            <% sellboook_tag.each do |t| %>
+              <% taglist = Tag.find(t.tag_id) %>
+              <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>#<%= taglist.tagname %></a>
+            <% end %>
+          </p>
+        </div>
+        <div class="card-reveal" >
+          <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
+          <p><div id = "<%= "endtime"+(x.id).to_s %>"></div></p>
+          <p> 저자  <%= x.bookauthor %>  </p>
+          <p> 현재가격  <%= x.bookprice %> 원 </p>
+          <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
+          <% if deadline > 604800 %>
+            <p>
+              <a class="btn btn-default" role="button" id=<%= "restore_sell"+(x.id).to_s %>>수정</a>
+              <a href="/bookparty/delete/<%= x.id %>" class="btn btn-default" role="button">삭제</a>
+           </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+   
+<!-- 판매탭 종료된 것 -->
+<% @close.each do |x| %> <!-- 종료된거 뿌려줌  -->
+  <div class = "col-sm-6 col-md-4">
     <div class="card">
-    <div class="card-image waves-effect waves-block waves-light">
-    <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
-    </div>
-    <div class="card-content" style="padding: 10px;">
-    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-    </br><b><span id = "<%= x.id %>"></span></b>
-    <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
-    <% sellboook_tag.each do |t| %>
-    <% taglist = Tag.find(t.tag_id) %>
-    <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>
-#<%= taglist.tagname %>
-    </a>
-    <% end %>
-    </p>
-    </div>
-    <div class="card-reveal" >
-    <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
-    <p><div id = "<%= "endtime"+(x.id).to_s %>"></div></p>
-    <p> 저자  <%= x.bookauthor %>  </p>
-    <p> 현재가격  <%= x.bookprice %> 원 </p>
-    <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
-    <% if deadline > 604800 %>
-    <p>
-    <a class="btn btn-default" role="button" id=<%= "restore_sell"+(x.id).to_s %>>수정</a>
-    <a href="/bookparty/delete/<%= x.id %>" class="btn btn-default" role="button">삭제</a>
-    </p>
-    <% end %>
-    </div>
-    </div></div>
-    <% end %>
-    <% end %>
-    <!-- 판매탭 종료된 것 -->
-    <% @close.each do |x| %> <!-- 종료된거 뿌려줌  -->
-    <div class = "col-sm-6 col-md-4">
-    <div class="card">
-    <div class="card-image waves-effect waves-block waves-light">
-    <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
-    </div>
-    <div class="card-content" style="padding: 10px;">
-    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-   </br> <b><span>종료된 매물입니다. </span></b>
-    <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
-    <% sellboook_tag.each do |t| %>
-    <% taglist = Tag.find(t.tag_id) %>
-    <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>
-#<%= taglist.tagname %>
-    </a>
-    <% end %>
-    </p>
-    </div>
-    <div class="card-reveal" id=<%= "card-reveal-sell"+(x.id).to_s %>>
-    <span class="card-title grey-text text-darken-4">
-    <center><b><%= x.booktitle %></b></center>
-    <i class="material-icons right">close</i>
-    </span>
-    <% auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice).take
-    if auction.nil? %>
-        <p></p>
-        <center>----------------------------------</center>
-        <center>거래실패</center>
-        <center>----------------------------------</center>
-        <b>기간을 연장해보세요!</b>
-        <p><a href="#" class="btn btn-default delaybtn" role="button" id=<%= "add"+(x.id).to_s %>>연장</a></p>
-    
-    <%  else  %>
-        <%  notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
-        unless notification.nil?
+      <div class="card-image waves-effect waves-block waves-light">
+        <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
+      </div>
+      <div class="card-content" style="padding: 10px;">
+        <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+        </br> <b><span>종료된 매물입니다. </span></b>
+        <p> 
+        <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
+          <% sellboook_tag.each do |t| %>
+          <% taglist = Tag.find(t.tag_id) %>
+          <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>#<%= taglist.tagname %></a>
+        <% end %>
+        </p>
+      </div>
+      <a name="<%= 'sell_link' + x.id.to_s %>"></a>
+      <div class="card-reveal" id=<%= "card-reveal-sell"+(x.id).to_s %>>
+        <span class="card-title grey-text text-darken-4">
+          <center><b><%= x.booktitle %></b></center>
+          <i class="material-icons right">close</i>
+        </span>
+        <% auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice).take
+          if auction.nil? %>
+            <p></p>
+            <center>----------------------------------</center>
+            <center>거래실패</center>
+            <center>----------------------------------</center>
+            <b>기간을 연장해보세요!</b>
+            <p><a href="#" class="btn btn-default delaybtn" role="button" id=<%= "add"+(x.id).to_s %>>연장</a></p>
+        <%  else  %>
+          <%  notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
+          unless notification.nil?
             notification.checked = 1
             notification.save
-        end 
-       
-        %>
-               <p><b>판매가격</b> : <%= x.bookprice %> 원 </p>
-        <center>----------------------------------</center>
-        <center>구매자정보</center>
-        <center>----------------------------------</center>
-        <p><b>구매자</b> : <%= User.find(auction.user_id).username %></p>
-        <p><b>연락처</b> : <%= User.find(auction.user_id).userphone %></p>
-       
-        <p><a class="waves-effect waves-light btn delaybtn" > 신고</a>
-    <% end %>
-    
+          end %>
+          <p><b>판매가격</b> : <%= x.bookprice %> 원 </p>
+          <center>----------------------------------</center>
+          <center>구매자정보</center>
+          <center>----------------------------------</center>
+          <p><b>구매자</b> : <a href=<%= "/bookparty/seller_page?name="+ User.find(auction.user_id).username %> name="name">
+          <%= User.find(auction.user_id).username %></a></p>
+          <p><b>연락처</b> : <%= User.find(auction.user_id).userphone %></p>
+        
+          <% auc = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice).take
+            u = auc.user_id %>
+          <% if Warn.find_by_user_id(u).nil? %>
+            <p><a class="waves-effect waves-light btn delaybtn" role="button" id=<%= "warn" + (x.id).to_s %> > 신고</a></p>
+          <% else %>
+            <p><a class="waves-effect waves-light btn disabled" role="button" id=<%= "warn" + (x.id).to_s %> > 신고</a></p>
+          <% end %>
+        <% end %>
+      </div>
     </div>
-    </div>
-   <div class="modal modal-fixed-footer" id=<%= "add_time" + (x.id).to_s %>>
-    <div class="modal-content">
-    <span class="close" >x</span>
-    <h4>시간설정</h4>
-    <form method="post" action="/bookparty/add_time_complete" enctype="multipart/form-data">
-    <input type = "hidden" name = "sellbook_id" value = "<%= x.id %>" >
-    <table>
-    <thead>
-    <tr>
-    <th data-field="time">Date</th>
-    <th data-field="id">Time</th>
-    </tr>
-    </thead>
 
-    <tbody>
-    <tr>
-    <td><input type="text" placeholder="경매 종료 날짜를 선택하세요" class='datepicker' name = "booksellterm_date"></td>
-    <td><input type="text" placeholder="경매 종로 시간을 선택하세요" class="clock" name = "booksellterm_time"></td>
-    </tr>
-    <tr>
-    <td></td>
-    <td>
-    <button style ="margin-left: 600px; margin-top: 30px"class="btn waves-effect waves-light" type="submit" name="action">save
-    <i class="material-icons right">send</i>
-    </button></td>
-    </tr>
-    </tbody>
-    </table>
-    </form>
+    <div class="modal modal-fixed-footer" id=<%= "add_time" + (x.id).to_s %>>
+      <div class="modal-content">
+        <span class="close" >x</span>
+        <h4>시간설정</h4>
+        <form method="post" action="/bookparty/add_time_complete" enctype="multipart/form-data">
+          <input type = "hidden" name = "sellbook_id" value = "<%= x.id %>" >
+          <table>
+            <thead>
+              <tr>
+              <th data-field="time">Date</th>
+              <th data-field="id">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+              <td><input type="text" placeholder="경매 종료 날짜를 선택하세요" class='datepicker' name = "booksellterm_date"></td>
+              <td><input type="text" placeholder="경매 종로 시간을 선택하세요" class="clock" name = "booksellterm_time"></td>
+              </tr>
+              <tr>
+              <td></td>
+              <td>
+                <button style ="margin-left: 600px; margin-top: 30px"class="btn waves-effect waves-light" type="submit" name="action">save
+                <i class="material-icons right">send</i></button>
+              </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
     </div>
-    </div>
-    </div>
-    <% end %>
-    </div>
+  </div>
+<% end %>
+      </div>
     </div> <!-- row div end -->
-    </ul>
     </div>
+  </div>
 
-    <!-- 구매탭 종료 안된 것 -->
-    <div id="buybook" class="tab-pane fade">
-    <div class="tabcontents">
+<!-- 구매탭 종료 안된 것 -->
+<div id="buybook" class="tab-pane fade">
+  <div class="tabcontents">
     <% @auction.each do |a| %>  <!-- 최근 업데이트 한 순으로 재배열 필요 -->
-    <% @auction_book = Sellbook.where(id: a.sellbook_id).order('booksellterm ASC') %> <!--  #auction의 sellbook_id와 같은 책정보수집  -->
-    <div class = "sell-book-list" >
-    <div class = "row">
-    <% @auction_book.each do |x| %>
-    <%  Time.zone = 'Seoul'
-    now = Time.zone.now
-    deadline_buy = x.booksellterm - now.to_i %>
-    <script>
-    $(function () {
-            var id = <%= x.id %>;
+      <% @auction_book = Sellbook.where(id: a.sellbook_id).order('booksellterm ASC') %> <!--  #auction의 sellbook_id와 같은 책정보수집  -->
+      <div class = "wrapper" >
+      <div class = "row">
+      <% @auction_book.each do |x| %>
+        <%  Time.zone = 'Seoul'
+            now = Time.zone.now
+            deadline_buy = x.booksellterm - now.to_i %>
 
-            $('#' + 'buyed' + id).countdown({until: +<%= deadline_buy %>});
-            $('#' + 'buyedendtime' + id).countdown({until: +<%= deadline_buy %>});
+<script type="text/javascript">
+  $(function () {
+    var id = <%= x.id %>;
 
-            });
+    $('#' + 'buyed' + id).countdown({until: +<%= deadline_buy %>});
+
+    $('#' + 'buyedendtime' + id).countdown({until: +<%= deadline_buy %>});
+ 
+    $('#'+'warnseller'+id).click(function(){
+      var x = window.confirm("정말 신고하시겠습니까?");
+      if (x){
+        window.location.href = '/bookparty/warnn/<%= x.id %>'; 
+      }else{
+        return;
+      }
+    });
+  });
 </script>
 
-<%  if deadline_buy <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
+  <%  if deadline_buy <= 0 #종료된 것은 close 리스트에 임시저장(배열 따로만듬)
     @close_buy << x %>
-    <%  else %>
+  <%  else %>
     <div class ="col-sm-6 col-md-4">
-    <div class="card">
-    <div class="card-image waves-effect waves-block waves-light">
-    <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
+      <div class="card">
+        <div class="card-image waves-effect waves-block waves-light">
+          <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
+        </div>
+        <div class="card-content" style="padding: 10px;">
+          <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+          </br><b><span id = "<%= "buyed"+(x.id).to_s %>"></span></b>
+          <p><% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
+          <% sellboook_tag.each do |t| %>
+            <% taglist = Tag.find(t.tag_id) %>
+            <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>#<%= taglist.tagname %></a>
+          <% end %>
+          </p>
+        </div>
+        <div class="card-reveal">
+          <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
+          <p><div id = "<%= "buyedendtime"+(x.id).to_s %>"></div></p>
+          <p> 저자  <%= x.bookauthor %>  </p>
+          <p> 현재가격  <%= x.bookprice %> 원 </p>
+          <b><p>내가 입찰한 가격 <%= Auction.where(sellbook_id: x.id, user_id: @userid).take.auctionprice  %>원</p></b>
+          <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
+          <% if deadline_buy > 604800 %>
+            <p><a href="/bookparty/auction_delete/<%= x.id %>"  class="btn btn-primary" role="button">입찰취소</a> 
+          <% end %>
+          <% if x.bookprice > Auction.where(sellbook_id: x.id, user_id: @userid).take.auctionprice %>
+            <p><b style="color:red; font-size:11pt;">현재가보다 낮으시네요~</b></p>
+          <% end %>
+        </div>
+      </div>
     </div>
-    <div class="card-content" style="padding: 10px;">
-    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-    </br><b><span id = "<%= "buyed"+(x.id).to_s %>"></span></b>
-    <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
-    <% sellboook_tag.each do |t| %>
-    <% taglist = Tag.find(t.tag_id) %>
-    <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>
-#<%= taglist.tagname %>
-    </a>
-    <% end %>
-    </p>
-    </div>
-    <div class="card-reveal">
-    <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
-    <p><div id = "<%= "buyedendtime"+(x.id).to_s %>"></div></p>
-    <p> 저자  <%= x.bookauthor %>  </p>
-    <p> 현재가격  <%= x.bookprice %> 원 </p>
-    <b><p>내가 입찰한 가격 <%= Auction.where(sellbook_id: x.id, user_id: @userid).take.auctionprice  %>원</p></b>
-    <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
-    <% if deadline_buy > 604800 %>
-    <p><a href="/bookparty/auction_delete/<%= x.id %>"  class="btn btn-primary" role="button">입찰취소</a> 
-      <% if x.bookprice > Auction.where(sellbook_id: x.id, user_id: @userid).take.auctionprice %>
-        <p><b style="color:red;">현재가보다 낮으시네요~</b></p>
+  <% end %>
       <% end %>
     <% end %>
-   
-   </div>
-    </div>
-    </div>
-    <% end %>
-    <% end %>
-    <% end %>
 
-    <!-- 구매탭 종료된 것 -->
-    <% @close_buy.each do |x| %> <!-- 종료된거 뿌려줌  -->
-    <div class ="col-sm-6 col-md-4">
+<!-- 구매탭 종료된 것 -->
+<% @close_buy.each do |x| %> <!-- 종료된거 뿌려줌  -->
+  <div class ="col-sm-6 col-md-4">
     <div class="card">
-    <div class="card-image waves-effect waves-block waves-light">
-    <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
-    </div>
-    <div class="card-content"style="padding: 10px;" >
-    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-    </br><b><span>종료된 매물입니다. </span></b>
-    <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
-    <% sellboook_tag.each do |t| %>
-    <% taglist = Tag.find(t.tag_id) %>
-    <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>
-#<%= taglist.tagname %>
-    </a>
-    <% end %>
-    </p>
-    </div>
-    <div class="card-reveal" id=<%= "card-reveal-buy"+(x.id).to_s %>>
-    <span class="card-title grey-text text-darken-4"><center><b><%= x.booktitle %></b></center><i class="material-icons right">close</i></span>
-    <% auction = Auction.where(sellbook_id: x.id, user_id: @userid, auctionprice: x.bookprice).take
-        if auction.nil? %>
+      <div class="card-image waves-effect waves-block waves-light">
+        <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
+      </div>
+      <div class="card-content"style="padding: 10px;" >
+        <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+        </br><b><span>종료된 매물입니다. </span></b>
+        <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %>
+        <% sellboook_tag.each do |t| %>
+          <% taglist = Tag.find(t.tag_id) %>
+          <a href=<%= "/bookparty/tagresult?tagSearch="+ taglist.tagname %>>#<%= taglist.tagname %></a>
+        <% end %>
+        </p>
+      </div>
+      <a name="<%= 'buy_link' + x.id.to_s %>"></a>
+      <div class="card-reveal" id=<%= "card-reveal-buy"+(x.id).to_s %>>
+        <span class="card-title grey-text text-darken-4"><center><b><%= x.booktitle %></b></center><i class="material-icons right">close</i></span>
+        <% auction = Auction.where(sellbook_id: x.id, user_id: @userid, auctionprice: x.bookprice).take %>
+        <% if auction.nil? %>
           <h5>거래뺏김...</h5>
-    <%  else  %>
-        <% notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
-           unless notification.nil?
-             notification.checked = 1
-             notification.save
-           end %>
-        <p><b>책 저자</b> : <%= x.bookauthor %>  </p>
-        <p><b>출판사</b> : <%= x.bookpublisher %>  </p>
+        <% else  %>
+          <% notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
+          unless notification.nil?
+            notification.checked = 1
+            notification.save
+          end %>
+          <p><b>책 저자</b> : <%= x.bookauthor %>  </p>
+          <p><b>출판사</b> : <%= x.bookpublisher %>  </p>
+          <p><b>구매가격</b> : <%= x.bookprice %> 원 </p>
+          <center>----------------------------------</center>
+          <center>판매자정보</center>
+          <center>----------------------------------</center>
+          <p><b>판매자</b> : <a href=<%= "/bookparty/seller_page?name="+ User.find(x.user_id).username %> name="name">
+          <%= User.find(x.user_id).username %></a></p>
+          <p><b>연락처</b> : <%= User.find(x.user_id).userphone %></p>
 
-        <p><b>구매가격</b> : <%= x.bookprice %> 원 </p>
-        <center>----------------------------------</center>
-        <center>판매자정보</center>
-        <center>----------------------------------</center>
-        <p><b>판매자</b> : <%= User.find(x.user_id).username %></p>
-        <p><b>연락처</b> : <%= User.find(x.user_id).userphone %></p>
+          <% if Warn.where(user_id: x.user_id, warner: session[:user_id]).count == 0 %>
+            <p><a class="waves-effect waves-light btn" role="button" id=<%= "warnseller" + (x.id).to_s %> > 신고</a></p>
+          <% else %>
+            <p><a class="waves-effect waves-light btn disabled" role="button" id=<%= "warnseller" + (x.id).to_s %> > 신고</a></p>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+</div>
+      </div> <!-- row end  -->
+    </div>
+  </div>
+</div>
 
-        <p><a class="waves-effect waves-light btn delaybtn" > 신고</a>
-    <%  end  %>
-    
-    </div>
-    </div>
+</div>
+</body>
 
-    </div>
-    <% end %>
-    </div>
-    </div> <!-- row end  -->
-    </div>
-    </div>
-    </div>
-
-    </div>
-    </body>

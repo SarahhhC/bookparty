@@ -11,9 +11,17 @@
   
   <% else %>
     <% uid = User.find_by_username(@name).id
-       sellbook = Sellbook.where(user_id: uid).order('booksellterm ASC') %>
+       sellbook = Sellbook.where(user_id: uid).order('booksellterm ASC')
+       warn = Warn.find_by_user_id(uid)
+       if warn.nil?
+         w = 0
+       else
+         w = warn.count
+       end
+    %>
     <div>
       <center> <p id="mypagetitle"><%= @name %> Page</p> </center>
+      <center> <h5>신고 <%= w %>회</h5></center>
       <div class = "current-user"  style="display: inline-block; float: right">
       </div>
     </div>
@@ -22,7 +30,7 @@
       <li><a href="#link"><input type="button" id="sellbookbtn" value="판매한 책" /></a>
         <ul>
           <% sellbook %>
-          <div class = "wrapper" >
+          <div class = "wrapper">
             <% sellbook.each do |x| %>
               <%  Time.zone = 'Seoul'
                   now = Time.zone.now #현재시간은 계속 업데이트 됨 - 업데이트 되는값을 계속 집어넣어줘야지
@@ -40,9 +48,10 @@
                   <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
                   </div>
-                  <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-                    <b><span id = "<%= x.id %>"></span></b>
+                  <div class="card-content" style="padding: 10px;">
+                    <span class="card-title activator grey-text text-darken-4">
+                    <%= x.booktitle %><i class="material-icons right">more_vert</i></span>
+                     </br><b><p id = "<%= x.id %>"></p></b>
                     <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
                         <% sellboook_tag.each do |t| %>
                           <% taglist = Tag.find(t.tag_id) %>
@@ -57,7 +66,6 @@
                         <p> 저자  <%= x.bookauthor %>  </p>
                         <p> 현재가격  <%= x.bookprice %> 원 </p>
                         <p> 즉구가격   <%= x.nowbookprice %> 원 </p>
-                        <p><div id = "<%= (x.id).to_s %>"></div></p>
                   </div>
                 </div>
               <% end %>
@@ -68,9 +76,9 @@
                   <div class="card-image waves-effect waves-block waves-light">
                     <img class="activator" src="<%= x.book_image.url %>" style="width:400px; height:300px;">
                   </div>
-                  <div class="card-content">
+                  <div class="card-content" style="padding: 10px;">
                     <span class="card-title activator grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">more_vert</i></span>
-                    <b><span>종료된 매물입니다. </span></b>
+                    </br><b><span>종료된 매물입니다. </span></b>
                     <p> <% sellboook_tag =  SellbooksTag.where(sellbook_id: x.id) %> 
                         <% sellboook_tag.each do |t| %>
                           <% taglist = Tag.find(t.tag_id) %>
@@ -84,14 +92,13 @@
                     <span class="card-title grey-text text-darken-4"><%= x.booktitle %><i class="material-icons right">close</i></span>
                       <% auction = Auction.where(sellbook_id: x.id, auctionprice: x.bookprice).take
                           if auction.nil? %>
-                            <h5>아무도 안삼...</h5>
+                            <center>----------------------------------</center>
+                            <center>거래실패</center>
+                            <center>----------------------------------</center>
                       <%  else  %>
-                          <%  notification = Notification.where(sellbook_id: x.id, user_id: @userid).take
-                              unless notification.nil?
-                                notification.checked = 1
-                                notification.save
-                              end %>
-                            <h5><%= auction.user_id %>님이 <%= auction.auctionprice %>원에 구매하셨음! 거래성공 </h5>
+                            <center>----------------------------------</center>
+                            <center>거래성공</center>
+                            <center>----------------------------------</center>
                       <%  end  %>
                       <p> 저자  <%= x.bookauthor %>  </p>
                       <p> 현재가격  <%= x.bookprice %> 원 </p>
